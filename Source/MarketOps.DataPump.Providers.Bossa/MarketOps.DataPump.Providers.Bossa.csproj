@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\VersionInfo\VersionInfo.cs" Link="VersionInfo.cs" />
+    <ProjectReference Include="..\MarketOps.DataPump\MarketOps.DataPump.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarketOps.Types\MarketOps.Types.csproj" />
+    <Compile Include="..\VersionInfo\VersionInfo.cs" Link="VersionInfo.cs" />
   </ItemGroup>
 
 </Project>
