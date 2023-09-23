@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
 using MarketOps.DataPump.Providers.Bossa.Stages;
 using MarketOps.Tests.Autofixture;
 using MarketOps.Types;

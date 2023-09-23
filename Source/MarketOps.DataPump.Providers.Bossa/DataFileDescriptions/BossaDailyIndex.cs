@@ -1,4 +1,4 @@
-﻿namespace MarketOps.DataPump.Providers.Bossa.Stages;
+﻿namespace MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
 
 /// <summary>
 /// Field indexes in daily data files from bossa.

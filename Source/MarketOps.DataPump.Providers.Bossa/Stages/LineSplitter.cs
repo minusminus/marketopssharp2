@@ -1,12 +1,12 @@
-﻿namespace MarketOps.DataPump.Providers.Bossa.Stages;
+﻿using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
+
+namespace MarketOps.DataPump.Providers.Bossa.Stages;
 
 /// <summary>
 /// Splits line separated by comma.
 /// </summary>
 internal static class LineSplitter
 {
-    private const char SplitChar = ',';
-
     public static IEnumerable<string[]> Split(this IEnumerable<string> lines)
     {
         foreach (string line in lines)
@@ -14,5 +14,5 @@ internal static class LineSplitter
     }
 
     private static string[] SplitLine(in string line) => 
-        line.Split(SplitChar);
+        line.Split(BossaDaily.Separator);
 }
