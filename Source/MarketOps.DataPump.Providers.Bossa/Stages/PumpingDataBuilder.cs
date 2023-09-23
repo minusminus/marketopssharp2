@@ -8,14 +8,6 @@ namespace MarketOps.DataPump.Providers.Bossa.Stages;
 /// </summary>
 internal static class PumpingDataBuilder
 {
-    internal const int IndexTicker = 0;
-    internal const int IndexDt = 1;
-    internal const int IndexOpen = 2;
-    internal const int IndexHigh = 3;
-    internal const int IndexLow = 4;
-    internal const int IndexClose = 5;
-    internal const int IndexVolume = 6;
-
     public static IEnumerable<PumpingData> ToPumpingData(this IEnumerable<string[]> lines, StockDataRange dataRange, StockDefinitionShort stockDefinition)
     {
         foreach (var line in lines)
@@ -26,11 +18,11 @@ internal static class PumpingDataBuilder
         new(
             dataRange,
             stockDefinition,
-            lines[IndexOpen],
-            lines[IndexHigh],
-            lines[IndexLow],
-            lines[IndexClose],
-            lines[IndexVolume],
-            lines[IndexDt]
+            lines[BossaDailyIndex.Open],
+            lines[BossaDailyIndex.High],
+            lines[BossaDailyIndex.Low],
+            lines[BossaDailyIndex.Close],
+            lines[BossaDailyIndex.Volume],
+            lines[BossaDailyIndex.Dt]
         );
 }

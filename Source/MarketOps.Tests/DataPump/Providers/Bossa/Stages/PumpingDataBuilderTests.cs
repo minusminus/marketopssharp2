@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using MarketOps.DataPump.Common;
 using MarketOps.DataPump.Providers.Bossa.Stages;
+using MarketOps.Tests.Autofixture;
 using MarketOps.Types;
 
 namespace MarketOps.Tests.DataPump.Providers.Bossa.Stages;
@@ -10,7 +11,7 @@ internal class PumpingDataBuilderTests
 {
     private readonly StockDataRange stockDataRange = StockDataRange.Daily;
     private readonly StockDefinitionShort stockDefinitionShort = new(1, StockType.Stock, "test");
-    private readonly Fixture fixture = new();
+    private readonly IFixture fixture = FixtureFactory.Get();
 
     [Test]
     public void ToPumpingData__ConvertsCorrectly([Values(1, 2)] int count)
@@ -29,12 +30,12 @@ internal class PumpingDataBuilderTests
         {
             item.DataRange.ShouldBe(stockDataRange);
             item.StockDefinition.ShouldBe(stockDefinitionShort);
-            item.O.ShouldBe(expected[PumpingDataBuilder.IndexOpen]);
-            item.H.ShouldBe(expected[PumpingDataBuilder.IndexHigh]);
-            item.L.ShouldBe(expected[PumpingDataBuilder.IndexLow]);
-            item.C.ShouldBe(expected[PumpingDataBuilder.IndexClose]);
-            item.V.ShouldBe(expected[PumpingDataBuilder.IndexVolume]);
-            item.Ts.ShouldBe(expected[PumpingDataBuilder.IndexDt]);
+            item.O.ShouldBe(expected[BossaDailyIndex.Open]);
+            item.H.ShouldBe(expected[BossaDailyIndex.High]);
+            item.L.ShouldBe(expected[BossaDailyIndex.Low]);
+            item.C.ShouldBe(expected[BossaDailyIndex.Close]);
+            item.V.ShouldBe(expected[BossaDailyIndex.Volume]);
+            item.Ts.ShouldBe(expected[BossaDailyIndex.Dt]);
         }
     }
 }
