@@ -4,35 +4,17 @@ using MarketOps.Types;
 namespace MarketOps.DataPump.Providers.Bossa.Stages;
 
 /// <summary>
-/// Filters data lines up to specified datetime.
+/// Filters original data lines up to specified datetime.
 /// To be executed before splitting line to cells.
 /// </summary>
 internal static class FullLinesFilter
 {
-    private struct Bounds
-    {
-        public int LowerBound;
-        public int UpperBound;
-
-        public Bounds(int lowerBound, int upperBound) : this()
+    public static IEnumerable<string> FilterOutToDate(this IEnumerable<string> lines, DateTime ts, StockDataRange stockDataRange) =>
+        stockDataRange switch
         {
-            LowerBound = lowerBound;
-            UpperBound = upperBound;
-        }
-    }
-
-    public static IEnumerable<string> FilterOutToDate(this IEnumerable<string> lines, DateTime ts, StockDataRange stockDataRange)
-    {
-        switch(stockDataRange)
-        {
-            case StockDataRange.Daily:
-            case StockDataRange.Weekly:
-            case StockDataRange.Monthly:
-                return FilterOutDaily(lines, ts);
-            default:
-                throw new ArgumentException($"Not supported data range {stockDataRange}", nameof(stockDataRange));
+            StockDataRange.Daily or StockDataRange.Weekly or StockDataRange.Monthly => FilterOutDaily(lines, ts),
+            _ => throw new ArgumentException($"Not supported data range {stockDataRange}", nameof(stockDataRange)),
         };
-    }
 
     private static IEnumerable<string> FilterOutDaily(IEnumerable<string> lines, DateTime ts) => 
         FilterOut(lines, ts.ToString("yyyyMMdd"));
