@@ -1,5 +1,5 @@
-﻿using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
-using MarketOps.Types;
+﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
 
 namespace MarketOps.DataPump.Providers.Bossa.Stages;
 
@@ -10,11 +10,11 @@ namespace MarketOps.DataPump.Providers.Bossa.Stages;
 /// </summary>
 internal static class LinesFilterToDate
 {
-    public static IEnumerable<string[]> FilterOutToDate(this IEnumerable<string[]> lines, DateTime ts, StockDataRange stockDataRange) =>
-        stockDataRange switch
+    public static IEnumerable<string[]> FilterOutToDate(this IEnumerable<string[]> lines, DateTime ts, PumpingDataRange dataRange) =>
+        dataRange switch
         {
-            StockDataRange.Daily or StockDataRange.Weekly or StockDataRange.Monthly => FilterOutDaily(lines, ts),
-            _ => throw new ArgumentException($"Not supported data range {stockDataRange}", nameof(stockDataRange)),
+            PumpingDataRange.Daily => FilterOutDaily(lines, ts),
+            _ => throw new ArgumentException($"Not supported data range {dataRange}", nameof(dataRange)),
         };
 
     private static IEnumerable<string[]> FilterOutDaily(IEnumerable<string[]> lines, DateTime ts) =>

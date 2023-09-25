@@ -1,4 +1,5 @@
-﻿using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
+﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
 using MarketOps.DataPump.Providers.Bossa.Stages;
 
 namespace MarketOps.Tests.DataPump.Providers.Bossa.Stages;
@@ -24,7 +25,7 @@ internal class LinesFilterToDateTests
         int[] dateParts = SplitToDateParts(ts);
         var dt = new DateTime(dateParts[0], dateParts[1], dateParts[2]);
 
-        var result = LinesFilterToDate.FilterOutToDate(testDataDaily, dt, Types.StockDataRange.Daily).ToList();
+        var result = LinesFilterToDate.FilterOutToDate(testDataDaily, dt, PumpingDataRange.Daily).ToList();
 
         result.Count.ShouldBe(expected.Length);
         for (int i = 0; i < result.Count; i++)
@@ -37,18 +38,10 @@ internal class LinesFilterToDateTests
     }
 
     [Test]
-    public void FilterOutToDate_UndefinedRange__Throws()
-    {
-        var dt = new DateTime(2022, 12, 02);
-
-        Should.Throw<ArgumentException>(() => LinesFilterToDate.FilterOutToDate(testDataDaily, dt, Types.StockDataRange.Undefined).ToList());
-    }
-
-    [Test]
     public void FilterOutToDate_TickRange__Throws()
     {
         var dt = new DateTime(2022, 12, 02, 13, 20, 00);
 
-        Should.Throw<ArgumentException>(() => LinesFilterToDate.FilterOutToDate(testDataDaily, dt, Types.StockDataRange.Tick).ToList());
+        Should.Throw<ArgumentException>(() => LinesFilterToDate.FilterOutToDate(testDataDaily, dt, PumpingDataRange.Tick).ToList());
     }
 }
