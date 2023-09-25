@@ -33,7 +33,7 @@ internal static class FullLinesFilter
     }
 
     private static int FindLineFirstSeparator(in string line) => 
-        line.IndexOf(BossaDaily.Separator);
+        line.IndexOf(BossaDaily.FieldsSeparator);
 
     private static bool LineAfterTs(in string line, in string ts, int firstSeparatorIndex) =>
         string.Compare(line, firstSeparatorIndex + 1, ts, 0, ts.Length) > 0;

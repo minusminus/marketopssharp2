@@ -14,5 +14,5 @@ internal static class LineSplitter
     }
 
     private static string[] SplitLine(in string line) => 
-        line.Split(BossaDaily.Separator);
+        line.Split(BossaDaily.FieldsSeparator);
 }
