@@ -11,8 +11,4 @@
     <Compile Include="..\VersionInfo\VersionInfo.cs" Link="VersionInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MarketOps.Types\MarketOps.Types.csproj" />
-  </ItemGroup>
-
 </Project>

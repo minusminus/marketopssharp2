@@ -7,7 +7,7 @@ namespace MarketOps.DataPump.Common;
 /// </summary>
 public class PumpingData
 {
-    public readonly StockDataRange DataRange;
+    public readonly PumpingDataRange DataRange;
     public readonly StockDefinitionShort StockDefinition;
     public readonly string O;
     public readonly string H;
@@ -16,7 +16,7 @@ public class PumpingData
     public readonly string V;
     public readonly string Ts;
 
-    public PumpingData(StockDataRange dataRange, StockDefinitionShort stockDefinition, string o, string h, string l, string c, string v, string ts)
+    public PumpingData(PumpingDataRange dataRange, StockDefinitionShort stockDefinition, string o, string h, string l, string c, string v, string ts)
     {
         DataRange = dataRange;
         StockDefinition = stockDefinition;

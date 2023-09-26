@@ -10,7 +10,7 @@ namespace MarketOps.Tests.DataPump.Providers.Bossa.Stages;
 [TestFixture]
 internal class PumpingDataBuilderTests
 {
-    private readonly StockDataRange stockDataRange = StockDataRange.Daily;
+    private readonly PumpingDataRange dataRange = PumpingDataRange.Daily;
     private readonly StockDefinitionShort stockDefinitionShort = new(1, StockType.Stock, "test");
     private readonly IFixture fixture = FixtureFactory.Get();
 
@@ -21,7 +21,7 @@ internal class PumpingDataBuilderTests
             .Select(_ => fixture.CreateMany<string>(7).ToArray())
             .ToList();
 
-        var result = PumpingDataBuilder.ToPumpingData(input, stockDataRange, stockDefinitionShort).ToList();
+        var result = PumpingDataBuilder.ToPumpingData(input, dataRange, stockDefinitionShort).ToList();
 
         result.Count.ShouldBe(input.Count);
         for (int i = 0; i < input.Count; i++)
@@ -29,7 +29,7 @@ internal class PumpingDataBuilderTests
 
         void CheckResultItem(PumpingData item, string[] expected)
         {
-            item.DataRange.ShouldBe(stockDataRange);
+            item.DataRange.ShouldBe(dataRange);
             item.StockDefinition.ShouldBe(stockDefinitionShort);
             item.O.ShouldBe(expected[BossaDailyIndex.Open]);
             item.H.ShouldBe(expected[BossaDailyIndex.High]);

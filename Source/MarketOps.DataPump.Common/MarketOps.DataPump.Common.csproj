@@ -12,12 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.151" />
-    <PackageReference Include="Npgsql" Version="7.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MarketOps.DataPump.Common\MarketOps.DataPump.Common.csproj" />
+    <ProjectReference Include="..\MarketOps.Types\MarketOps.Types.csproj" />
   </ItemGroup>
 
 </Project>

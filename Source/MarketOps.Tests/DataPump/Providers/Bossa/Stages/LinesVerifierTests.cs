@@ -1,7 +1,6 @@
 ﻿using MarketOps.DataPump.Common;
 using MarketOps.DataPump.Providers.Bossa.Stages;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace MarketOps.Tests.DataPump.Providers.Bossa.Stages;
 

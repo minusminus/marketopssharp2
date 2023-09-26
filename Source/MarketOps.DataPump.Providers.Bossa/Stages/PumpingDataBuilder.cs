@@ -9,13 +9,13 @@ namespace MarketOps.DataPump.Providers.Bossa.Stages;
 /// </summary>
 internal static class PumpingDataBuilder
 {
-    public static IEnumerable<PumpingData> ToPumpingData(this IEnumerable<string[]> lines, StockDataRange dataRange, StockDefinitionShort stockDefinition)
+    public static IEnumerable<PumpingData> ToPumpingData(this IEnumerable<string[]> lines, PumpingDataRange dataRange, StockDefinitionShort stockDefinition)
     {
         foreach (var line in lines)
             yield return BuildPumpingData(line, dataRange, stockDefinition);
     }
 
-    private static PumpingData BuildPumpingData(in string[] lines, in StockDataRange dataRange, in StockDefinitionShort stockDefinition) =>
+    private static PumpingData BuildPumpingData(in string[] lines, in PumpingDataRange dataRange, in StockDefinitionShort stockDefinition) =>
         new(
             dataRange,
             stockDefinition,

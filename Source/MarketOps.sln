@@ -5,13 +5,15 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.DataPump", "MarketOps.DataPump\MarketOps.DataPump.csproj", "{602961ED-BF83-40BE-8C5E-4A6C91682681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.Tests", "MarketOps.Tests\MarketOps.Tests.csproj", "{D39FCEDB-7215-414D-BE6B-3EAAFE34AD0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.Tests", "MarketOps.Tests\MarketOps.Tests.csproj", "{D39FCEDB-7215-414D-BE6B-3EAAFE34AD0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.DataPump.Providers.Bossa", "MarketOps.DataPump.Providers.Bossa\MarketOps.DataPump.Providers.Bossa.csproj", "{2FEB1B32-2A19-43AB-8BC0-3C4CD4DA32F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.DataPump.Providers.Bossa", "MarketOps.DataPump.Providers.Bossa\MarketOps.DataPump.Providers.Bossa.csproj", "{2FEB1B32-2A19-43AB-8BC0-3C4CD4DA32F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.Types", "MarketOps.Types\MarketOps.Types.csproj", "{609D488B-2216-47BF-BD9E-C08666A6476E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.Types", "MarketOps.Types\MarketOps.Types.csproj", "{609D488B-2216-47BF-BD9E-C08666A6476E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.DataPump.Storers.Pg", "MarketOps.DataPump.Storers.Pg\MarketOps.DataPump.Storers.Pg.csproj", "{66CA946D-3D36-4A2C-B103-ED6DC8E20134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.DataPump.Storers.Pg", "MarketOps.DataPump.Storers.Pg\MarketOps.DataPump.Storers.Pg.csproj", "{66CA946D-3D36-4A2C-B103-ED6DC8E20134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.DataPump.Common", "MarketOps.DataPump.Common\MarketOps.DataPump.Common.csproj", "{239326AA-7D97-40E4-979D-BCDE6374F30C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{66CA946D-3D36-4A2C-B103-ED6DC8E20134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66CA946D-3D36-4A2C-B103-ED6DC8E20134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66CA946D-3D36-4A2C-B103-ED6DC8E20134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
