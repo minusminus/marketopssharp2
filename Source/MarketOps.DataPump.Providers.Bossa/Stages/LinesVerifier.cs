@@ -1,5 +1,5 @@
 ﻿using MarketOps.DataPump.Common;
-using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
+using MarketOps.DataPump.Providers.Bossa.Common;
 using Microsoft.Extensions.Logging;
 
 namespace MarketOps.DataPump.Providers.Bossa.Stages;

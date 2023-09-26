@@ -1,4 +1,4 @@
-﻿namespace MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
+﻿namespace MarketOps.DataPump.Providers.Bossa.Common;
 
 /// <summary>
 /// Daily data files' definitions.

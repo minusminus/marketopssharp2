@@ -1,5 +1,5 @@
 ﻿using MarketOps.DataPump.Common;
-using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
+using MarketOps.DataPump.Providers.Bossa.Common;
 using MarketOps.DataPump.Providers.Bossa.Stages;
 
 namespace MarketOps.Tests.DataPump.Providers.Bossa.Stages;

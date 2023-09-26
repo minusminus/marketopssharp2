@@ -1,0 +1,34 @@
+{
+  "daily": [
+    {
+      "stockType": 0,
+      "path ": "http://info.bossa.pl/pub/metastock/mstock/",
+      "fileName": "mstall.zip"
+    },
+    {
+      "stockType": 1,
+      "path ": "http://info.bossa.pl/pub/metastock/mstock/",
+      "fileName": "mstall.zip"
+    },
+    {
+      "stockType": 2,
+      "path ": "http://info.bossa.pl/pub/metastock/mstock/",
+      "fileName": "mstall.zip"
+    },
+    {
+      "stockType": 4,
+      "path ": "http://info.bossa.pl/pub/metastock/fundinwest/",
+      "fileName": "mstfun.zip"
+    },
+    {
+      "stockType": 5,
+      "path ": "http://info.bossa.pl/pub/metastock/waluty/",
+      "fileName": "mstnbp.zip"
+    },
+    {
+      "stockType": 6,
+      "path ": "http://info.bossa.pl/pub/metastock/forex/",
+      "fileName": "mstfx.zip"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿using MarketOps.DataPump.Providers.Bossa.DataFileDescriptions;
+﻿using MarketOps.DataPump.Providers.Bossa.Common;
 
 namespace MarketOps.DataPump.Providers.Bossa.Stages;
 
