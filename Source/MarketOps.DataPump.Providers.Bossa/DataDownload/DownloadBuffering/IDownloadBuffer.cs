@@ -8,5 +8,5 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 /// </summary>
 internal interface IDownloadBuffer
 {
-    public StreamReader GetFile(PumpingDataRange dataRange, StockDefinitionShort stockDefinition);
+    public BufferEntry GetFile(PumpingDataRange dataRange, StockDefinitionShort stockDefinition);
 }

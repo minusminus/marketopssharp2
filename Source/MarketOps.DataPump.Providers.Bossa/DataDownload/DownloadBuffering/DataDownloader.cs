@@ -25,7 +25,8 @@ internal class DataDownloader : IDataDownloader
 
     private IEnumerable<string> GetDailyLines(StockDefinitionShort stockDefinition)
     {
-        using var streamReader = _downloadBuffer.GetFile(PumpingDataRange.Daily, stockDefinition);
+        using var bufferEntry = _downloadBuffer.GetFile(PumpingDataRange.Daily, stockDefinition);
+        using var streamReader = bufferEntry.GetStream();
         if (!streamReader.EndOfStream)
             streamReader.ReadLine();
         while (!streamReader.EndOfStream)

@@ -1,6 +1,6 @@
-﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
+﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
-using System.Reflection;
 using System.Text.Json;
 
 namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
@@ -32,5 +32,5 @@ internal static class PathsConfigurationReader
     }
 
     private static string GetConfigFilePath() =>
-        Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, PathsFileName);
+        Path.Combine(Consts.ExecutingLocation, PathsFileName);
 }
