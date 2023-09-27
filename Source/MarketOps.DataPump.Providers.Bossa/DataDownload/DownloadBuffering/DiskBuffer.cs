@@ -1,8 +1,6 @@
 ﻿using MarketOps.DataPump.Common;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
-using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.Types;
-using System.IO.Compression;
 
 namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 
@@ -33,14 +31,21 @@ internal class DiskBuffer : IDownloadBuffer
     private BufferEntry GetDailyFile(StockDefinitionShort stockDefinition)
     {
         string zipFilePath;
-        if(!_dailyFilesBuffer.TryGetValue(stockDefinition.Type, out zipFilePath!))
-        {
-            zipFilePath = Path.Combine(_downloadPath, $"{stockDefinition.Type}.zip");
-            DownloadFile(PumpingDataRange.Daily, stockDefinition, zipFilePath);
-            _dailyFilesBuffer.Add(stockDefinition.Type, zipFilePath);
-        }
+        if (!GetFromDailyBuffer(stockDefinition.Type, out zipFilePath))
+            zipFilePath = DownloadAndStoreInDailyBuffer(stockDefinition);
 
         return GetDataFromZip(zipFilePath, $"{stockDefinition.Name}.mst");
+    }
+
+    private bool GetFromDailyBuffer(StockType stockType, out string zipFilePath) => 
+        _dailyFilesBuffer.TryGetValue(stockType, out zipFilePath!);
+
+    private string DownloadAndStoreInDailyBuffer(StockDefinitionShort stockDefinition)
+    {
+        string zipFilePath = Path.Combine(_downloadPath, $"{stockDefinition.Type}.zip");
+        DownloadFile(PumpingDataRange.Daily, stockDefinition, zipFilePath);
+        _dailyFilesBuffer.Add(stockDefinition.Type, zipFilePath);
+        return zipFilePath;
     }
 
     private void DownloadFile(PumpingDataRange dataRange, StockDefinitionShort stockDefinition, string zipFilePath) =>
@@ -52,6 +57,6 @@ internal class DiskBuffer : IDownloadBuffer
                 fs.Flush();
             });
 
-    private BufferEntry GetDataFromZip(string zipFilePath, string fileName) => 
+    private static BufferEntry GetDataFromZip(string zipFilePath, string fileName) => 
         DiskBufferEntry.Create(zipFilePath, fileName);
 }

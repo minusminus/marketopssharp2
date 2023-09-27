@@ -8,11 +8,11 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 /// <summary>
 /// Reads json download paths configuuration.
 /// </summary>
-internal static class PathsConfigurationReader
+internal class PathsConfigurationReader : IBossaPathsConfigurationReader
 {
     internal const string PathsFileName = "bossa.paths.json";
 
-    public static BossaPaths Read()
+    public BossaPaths Read()
     {
         var configFilePath = GetConfigFilePath();
         return DeserializeConfigFile(configFilePath)

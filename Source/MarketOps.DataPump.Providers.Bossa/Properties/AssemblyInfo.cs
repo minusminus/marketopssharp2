@@ -38,3 +38,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion(VersionInfo.AssemblyFileVersion)]
 
 [assembly: InternalsVisibleTo("MarketOps.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

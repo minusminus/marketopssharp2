@@ -23,11 +23,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="RichardSzalay.MockHttp" Version="6.0.0" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MarketOps.DataPump.Providers.Bossa\MarketOps.DataPump.Providers.Bossa.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mocks\" />
   </ItemGroup>
 
 </Project>

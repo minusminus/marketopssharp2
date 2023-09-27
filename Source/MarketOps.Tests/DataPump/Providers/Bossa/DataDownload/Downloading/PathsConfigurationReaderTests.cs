@@ -7,10 +7,18 @@ namespace MarketOps.Tests.DataPump.Providers.Bossa.DataDownload.Downloading;
 [TestFixture]
 internal class PathsConfigurationReaderTests
 {
+    private PathsConfigurationReader _testObj = null!;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _testObj = new PathsConfigurationReader();
+    }
+
     [Test]
     public void Read__ReadsCorrectly()
     {
-        var result = PathsConfigurationReader.Read();
+        var result = _testObj.Read();
 
         result.Daily.ShouldNotBeNull();
         result.Daily.Count.ShouldBe(6);
@@ -24,7 +32,7 @@ internal class PathsConfigurationReaderTests
         File.Move(configFilePath, tempFilePath);
         try
         {
-            Should.Throw<BossaConfigurationReaderException>(() => PathsConfigurationReader.Read());
+            Should.Throw<BossaConfigurationReaderException>(() => _testObj.Read());
         }
         finally
         {
