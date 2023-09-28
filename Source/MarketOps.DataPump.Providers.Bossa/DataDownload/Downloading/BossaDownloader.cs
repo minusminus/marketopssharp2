@@ -1,4 +1,5 @@
 ﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
 using MarketOps.Types;
@@ -8,7 +9,7 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 /// <summary>
 /// Downloads zipped data from bossa.
 /// </summary>
-internal class BossaDownloader
+internal class BossaDownloader : IBossaDownloader
 {
     private readonly IHttpClientFactory _factory;
     private readonly IBossaPathsConfigurationReader _configReader;

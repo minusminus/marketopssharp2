@@ -3,14 +3,14 @@ using System.Net;
 using System.Text.Json;
 using System.Text;
 
-namespace MarketOps.Tests.Mocks;
+namespace MarketOps.Tests.Mocks.HttpClientHelpers;
 
 /// <summary>
 /// Mechanizm upraszczający wykonanie operacji na HttpClient.
 /// </summary>
 internal static class MockHttpClientManager
 {
-    public static HttpClient CreateHttpClient(MockHttpMessageHandler msgHandler) => 
+    public static HttpClient CreateHttpClient(MockHttpMessageHandler msgHandler) =>
         msgHandler.ToHttpClient();
 
     public static HttpClient CreateHttpClient(MockHttpMessageHandler msgHandler, string uriString)

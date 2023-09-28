@@ -1,5 +1,4 @@
 ﻿using MarketOps.DataPump.Common;
-using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 using MarketOps.Types;
 
 namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
@@ -9,12 +8,12 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 /// </summary>
 internal class DiskBuffer : IDownloadBuffer
 {
-    private readonly BossaDownloader _downloader;
+    private readonly IBossaDownloader _downloader;
     private readonly string _downloadPath = Path.Combine(Consts.ExecutingLocation, nameof(DiskBuffer));
 
     private readonly Dictionary<StockType, string> _dailyFilesBuffer = new();
 
-    public DiskBuffer(BossaDownloader downloader)
+    public DiskBuffer(IBossaDownloader downloader)
     {
         _downloader = downloader;
         Directory.CreateDirectory(_downloadPath);

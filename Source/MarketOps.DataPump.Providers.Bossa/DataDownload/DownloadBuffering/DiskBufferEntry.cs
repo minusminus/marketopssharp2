@@ -5,6 +5,7 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 
 /// <summary>
 /// Buffer entry from disk buffer.
+/// File stream is opened in shared mode, to be readable by multiple tasks.
 /// </summary>
 internal class DiskBufferEntry : BufferEntry
 {
@@ -25,7 +26,12 @@ internal class DiskBufferEntry : BufferEntry
 
     public static BufferEntry Create(string zipFilePath, string fileName)
     {
-        var fs = File.OpenRead(zipFilePath);
+        var fs = new FileStream(zipFilePath, new FileStreamOptions()
+        {
+            Access = FileAccess.Read,
+            Mode = FileMode.Open,
+            Share = FileShare.Read
+        });
         var zip = new ZipArchive(fs, ZipArchiveMode.Read);
         var entry = zip.GetEntry(fileName);
         return new DiskBufferEntry(zipFilePath, fileName, fs, zip, entry);

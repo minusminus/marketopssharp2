@@ -1,7 +1,7 @@
 ﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
-using MarketOps.Tests.Mocks;
+using MarketOps.Tests.Mocks.HttpClientHelpers;
 using RichardSzalay.MockHttp;
 using System.IO.Compression;
 using System.Net;
