@@ -8,7 +8,7 @@ namespace MarketOps.Tests.Mocks.Types;
 /// </summary>
 internal class MockBufferEntry : BufferEntry
 {
-    private MemoryStream _contentStream;
+    private readonly MemoryStream _contentStream;
 
     public MockBufferEntry(string content)
     {

@@ -29,8 +29,7 @@ internal class DiskBuffer : IDownloadBuffer
 
     private BufferEntry GetDailyFile(StockDefinitionShort stockDefinition)
     {
-        string zipFilePath;
-        if (!GetFromDailyBuffer(stockDefinition.Type, out zipFilePath))
+        if (!GetFromDailyBuffer(stockDefinition.Type, out string zipFilePath))
             zipFilePath = DownloadAndStoreInDailyBuffer(stockDefinition);
 
         return GetDataFromZip(zipFilePath, $"{stockDefinition.Name}.mst");

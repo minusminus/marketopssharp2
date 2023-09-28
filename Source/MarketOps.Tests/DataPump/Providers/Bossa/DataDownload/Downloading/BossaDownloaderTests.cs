@@ -76,8 +76,10 @@ internal class BossaDownloaderTests
 
         static BossaPaths CreateBossaPaths()
         {
-            var bossaConfig = new BossaPaths();
-            bossaConfig.Daily = new List<DailyPathDescription>() { new DailyPathDescription() { StockType = Types.StockType.Stock, FileName = "test.test", Path = "http://test/" } };
+            var bossaConfig = new BossaPaths
+            {
+                Daily = new List<DailyPathDescription>() { new DailyPathDescription() { StockType = Types.StockType.Stock, FileName = "test.test", Path = "http://test/" } }
+            };
             return bossaConfig;
         }
     }
