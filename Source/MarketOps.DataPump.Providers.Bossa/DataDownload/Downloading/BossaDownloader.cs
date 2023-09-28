@@ -44,14 +44,8 @@ internal class BossaDownloader
         using var stream = client.GetStreamAsync(uri).Result;
         streamProcessor(stream);
     }
-    private static string BuildDailyUri(DailyPathDescription definition)
-    {
-        var path = new Uri(new Uri(definition.Path), definition.FileName).ToString();
-#if DEBUG
-        Console.WriteLine($"bossa uri: {path}");
-#endif
-        return path;
-    }
+    private static string BuildDailyUri(DailyPathDescription definition) => 
+        new Uri(new Uri(definition.Path), definition.FileName).ToString();
 
     private BossaPaths GetSingletonConfig()
     {

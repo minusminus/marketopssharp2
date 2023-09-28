@@ -1,7 +1,11 @@
 ﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
+using MarketOps.Tests.Mocks;
+using RichardSzalay.MockHttp;
 using System.IO.Compression;
+using System.Net;
+using System.Text;
 
 namespace MarketOps.Tests.DataPump.Providers.Bossa.DataDownload.Downloading;
 
@@ -45,7 +49,37 @@ internal class BossaDownloaderTests
     [Test]
     public void Get_Daily__Downloads()
     {
-        //false.ShouldBeTrue();
+        const string content = "some test content";
+        var contentArray = Encoding.UTF8.GetBytes(content);
+        using var contentStream = new MemoryStream(contentArray);
+        var httpClient = MockHttpClientManager.CreateHttpClient(CreateMessageHandler(contentStream));
+        _factory.CreateClient().Returns(httpClient);
+        _configReader.Read().Returns(CreateBossaPaths());
+        var testObj = new BossaDownloader(_factory, _configReader);
+        using var resultStream = new MemoryStream();
+
+        testObj.Get(MarketOps.DataPump.Common.PumpingDataRange.Daily, Types.StockType.Stock, "KGHM", stream => stream.CopyTo(resultStream));
+
+        resultStream.Position = 0;
+        resultStream.Length.ShouldBeGreaterThan(0);
+        var resultString = Encoding.UTF8.GetString(resultStream.ToArray());
+        resultString.ShouldBe(content);
+
+        static MockHttpMessageHandler CreateMessageHandler(MemoryStream contentStream)
+        {
+            var msgHandler = MockHttpClientManager.CreateMockHttpMessageHandler();
+            msgHandler
+                .When("*")
+                .Respond(HttpStatusCode.OK, new StreamContent(contentStream));
+            return msgHandler;
+        }
+
+        static BossaPaths CreateBossaPaths()
+        {
+            var bossaConfig = new BossaPaths();
+            bossaConfig.Daily = new List<DailyPathDescription>() { new DailyPathDescription() { StockType = Types.StockType.Stock, FileName = "test.test", Path = "http://test/" } };
+            return bossaConfig;
+        }
     }
 
     [Test]

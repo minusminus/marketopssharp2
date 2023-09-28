@@ -10,6 +10,9 @@ namespace MarketOps.Tests.Mocks;
 /// </summary>
 internal static class MockHttpClientManager
 {
+    public static HttpClient CreateHttpClient(MockHttpMessageHandler msgHandler) => 
+        msgHandler.ToHttpClient();
+
     public static HttpClient CreateHttpClient(MockHttpMessageHandler msgHandler, string uriString)
     {
         var client = msgHandler.ToHttpClient();
