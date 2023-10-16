@@ -12,12 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MarketOps.Common.Pg\MarketOps.Common.Pg.csproj" />
-    <ProjectReference Include="..\MarketOps.DataPump.Common\MarketOps.DataPump.Common.csproj" />
+    <PackageReference Include="Npgsql" Version="7.0.6" />
   </ItemGroup>
 
 </Project>

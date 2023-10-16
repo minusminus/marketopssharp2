@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.Types", "MarketOp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.DataPump.Storers.Pg", "MarketOps.DataPump.Storers.Pg\MarketOps.DataPump.Storers.Pg.csproj", "{66CA946D-3D36-4A2C-B103-ED6DC8E20134}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.DataPump.Common", "MarketOps.DataPump.Common\MarketOps.DataPump.Common.csproj", "{239326AA-7D97-40E4-979D-BCDE6374F30C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.DataPump.Common", "MarketOps.DataPump.Common\MarketOps.DataPump.Common.csproj", "{239326AA-7D97-40E4-979D-BCDE6374F30C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.Common.Pg", "MarketOps.Common.Pg\MarketOps.Common.Pg.csproj", "{77DD2EA1-E7B0-4339-946E-521198409C98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{239326AA-7D97-40E4-979D-BCDE6374F30C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77DD2EA1-E7B0-4339-946E-521198409C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DD2EA1-E7B0-4339-946E-521198409C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DD2EA1-E7B0-4339-946E-521198409C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DD2EA1-E7B0-4339-946E-521198409C98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

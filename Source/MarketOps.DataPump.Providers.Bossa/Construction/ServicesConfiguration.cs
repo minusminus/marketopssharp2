@@ -11,12 +11,13 @@ namespace MarketOps.DataPump.Providers.Bossa.Construction;
 /// </summary>
 internal static class ServicesConfiguration
 {
-    public static void RegisterBossaProvider(IServiceCollection services)
+    public static IServiceCollection RegisterBossaProvider(this IServiceCollection services)
     {
         services.AddSingleton<IBossaPathsConfigurationReader, PathsConfigurationReader>();
         services.AddSingleton<IBossaDownloader, BossaDownloader>();
         services.AddSingleton<IDownloadBuffer, DiskBuffer>();
         services.AddTransient<IDataDownloader, DataDownloader>();
         services.AddTransient<IDataPumpDataProvider, BossaDataProvider>();
+        return services;
     }
 }
