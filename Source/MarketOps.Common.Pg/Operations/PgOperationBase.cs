@@ -1,5 +1,4 @@
-﻿using MarketOps.Common.Pg.Construction;
-using Npgsql;
+﻿using MarketOps.Common.Pg.ConnectionFactory;
 using System.Data;
 
 namespace MarketOps.Common.Pg.Operations;
@@ -9,35 +8,20 @@ namespace MarketOps.Common.Pg.Operations;
 /// </summary>
 public abstract class PgOperationBase
 {
-    private readonly PostgresOptions _options;
+    private readonly IPgConnectionFactory _pgConnectionFactory;
 
-    protected PgOperationBase(PostgresOptions options)
+    protected PgOperationBase(IPgConnectionFactory pgConnectionFactory)
     {
-        _options = options;
+        _pgConnectionFactory = pgConnectionFactory;
     }
 
-    protected void VoidOperator(Action<IDbConnection> operation)
+    protected IDbConnection CreateAndOpenConnection()
     {
-        using var connection = CreateConnection();
+        var connection = CreateConnection();
         connection.Open();
-        operation(connection);
+        return connection;
     }
 
-    protected T SingleOperator<T>(Func<IDbConnection, T> operation)
-    {
-        using var connection = CreateConnection();
-        connection.Open();
-        return operation(connection);
-    }
-
-    protected IEnumerable<T> EnumerableOperator<T>(Func<IDbConnection, IEnumerable<T>> operation)
-    {
-        using var connection = CreateConnection();
-        connection.Open();
-        foreach (var item in operation(connection))
-            yield return item;
-    }
-
-    private IDbConnection CreateConnection() => 
-        new NpgsqlConnection(_options.ConnectionString);
+    private IDbConnection CreateConnection() =>
+        _pgConnectionFactory.Create();
 }

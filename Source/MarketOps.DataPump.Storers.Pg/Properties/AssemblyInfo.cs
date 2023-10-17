@@ -1,5 +1,6 @@
 ﻿using MarketOps;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Ogólne informacje o zestawie są kontrolowane poprzez następujący 
@@ -35,3 +36,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion(VersionInfo.AssemblyVersion)]
 [assembly: AssemblyFileVersion(VersionInfo.AssemblyFileVersion)]
 [assembly: AssemblyInformationalVersion(VersionInfo.AssemblyFileVersion)]
+
+[assembly: InternalsVisibleTo("MarketOps.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

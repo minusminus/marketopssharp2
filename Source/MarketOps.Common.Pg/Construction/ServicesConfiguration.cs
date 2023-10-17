@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using MarketOps.Common.Pg.ConnectionFactory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MarketOps.Common.Pg.Construction;
@@ -13,6 +14,7 @@ public static class ServicesConfiguration
         var options = new PostgresOptions();
         configuration.GetSection(nameof(PostgresOptions)).Bind(options);
         services.AddSingleton(options);
+        services.AddTransient<IPgConnectionFactory, PgConnectionFactory>();
         //services.AddTransient<IDbConnection>(sp =>
         //{
         //    var options = sp.GetRequiredService<PostgresOptions>();

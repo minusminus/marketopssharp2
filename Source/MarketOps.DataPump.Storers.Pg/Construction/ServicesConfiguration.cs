@@ -9,7 +9,7 @@ namespace MarketOps.DataPump.Storers.Pg.Construction;
 /// </summary>
 internal static class ServicesConfiguration
 {
-    public static IServiceCollection RegisterBossaProvider(this IServiceCollection services)
+    public static IServiceCollection RegisterPgStorer(this IServiceCollection services)
     {
         services.AddTransient<IDataPumpDataStorer, PgDataPumpStorer>();
         return services;

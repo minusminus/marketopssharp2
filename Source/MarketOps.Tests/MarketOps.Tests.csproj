@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.18.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="NUnit" Version="3.13.3" />
@@ -29,6 +31,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MarketOps.DataPump.Providers.Bossa\MarketOps.DataPump.Providers.Bossa.csproj" />
+    <ProjectReference Include="..\MarketOps.DataPump.Storers.Pg\MarketOps.DataPump.Storers.Pg.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appconfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
