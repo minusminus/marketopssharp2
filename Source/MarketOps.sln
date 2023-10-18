@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketOps.Common.Pg", "Mark
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.DataPump", "MarketOps.DataPump\MarketOps.DataPump.csproj", "{4890B9CD-40D4-47B0-AD63-ADF38663056F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.DataPump.Providers.Pg", "MarketOps.DataPump.Providers.Pg\MarketOps.DataPump.Providers.Pg.csproj", "{2EFE3BD1-149E-4BFC-93F4-DDBAEDDAB005}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{4890B9CD-40D4-47B0-AD63-ADF38663056F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4890B9CD-40D4-47B0-AD63-ADF38663056F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4890B9CD-40D4-47B0-AD63-ADF38663056F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EFE3BD1-149E-4BFC-93F4-DDBAEDDAB005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EFE3BD1-149E-4BFC-93F4-DDBAEDDAB005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EFE3BD1-149E-4BFC-93F4-DDBAEDDAB005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EFE3BD1-149E-4BFC-93F4-DDBAEDDAB005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

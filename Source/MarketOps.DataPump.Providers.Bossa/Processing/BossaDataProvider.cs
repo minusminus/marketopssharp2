@@ -8,7 +8,7 @@ namespace MarketOps.DataPump.Providers.Bossa.Processing;
 /// <summary>
 /// Data provider from bossa.
 /// </summary>
-internal class BossaDataProvider : IDataPumpDataProvider
+internal class BossaDataProvider : IDataPumpPumpingDataProvider
 {
     private readonly IDataDownloader _dataDownloader;
     private readonly ILogger _logger;

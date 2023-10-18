@@ -11,7 +11,7 @@ namespace MarketOps.DataPump.Storers.Pg.Operations;
 /// <summary>
 /// Stores PumpingData in Pg database.
 /// </summary>
-internal class PgDataPumpStorer : PgOperationBase, IDataPumpDataStorer
+internal class PgDataPumpStorer : PgOperationBase, IDataPumpPumpingDataStorer
 {
     public PgDataPumpStorer(IPgConnectionFactory pgConnectionFactory) : base(pgConnectionFactory)
     { }

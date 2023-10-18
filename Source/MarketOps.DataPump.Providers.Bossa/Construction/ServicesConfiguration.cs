@@ -17,7 +17,7 @@ public static class ServicesConfiguration
         services.AddSingleton<IBossaDownloader, BossaDownloader>();
         services.AddSingleton<IDownloadBuffer, DiskBuffer>();
         services.AddTransient<IDataDownloader, DataDownloader>();
-        services.AddTransient<IDataPumpDataProvider, BossaDataProvider>();
+        services.AddTransient<IDataPumpPumpingDataProvider, BossaDataProvider>();
         return services;
     }
 }

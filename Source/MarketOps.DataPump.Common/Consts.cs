@@ -8,4 +8,5 @@ namespace MarketOps.DataPump.Common;
 public static class Consts
 {
     public static string ExecutingLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+    public const string ConfigFileName = "appconfig.json";
 }

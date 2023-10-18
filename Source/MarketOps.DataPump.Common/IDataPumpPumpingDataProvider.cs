@@ -3,9 +3,9 @@
 namespace MarketOps.DataPump.Common;
 
 /// <summary>
-/// Interface to generate pumps' stock data from external source.
+/// Interface to generate pumps' data from external source.
 /// </summary>
-public interface IDataPumpDataProvider
+public interface IDataPumpPumpingDataProvider
 {
     public IEnumerable<PumpingData> Get(DateTime lastTs, PumpingDataRange dataRange, StockDefinitionShort stockDefinition);
 }

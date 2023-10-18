@@ -11,7 +11,7 @@ public static class ServicesConfiguration
 {
     public static IServiceCollection RegisterPgStorer(this IServiceCollection services)
     {
-        services.AddTransient<IDataPumpDataStorer, PgDataPumpStorer>();
+        services.AddTransient<IDataPumpPumpingDataStorer, PgDataPumpStorer>();
         return services;
     }
 }

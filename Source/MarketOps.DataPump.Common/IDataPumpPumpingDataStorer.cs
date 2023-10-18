@@ -3,7 +3,7 @@
 /// <summary>
 /// Interface to store stocks' data.
 /// </summary>
-public interface IDataPumpDataStorer
+public interface IDataPumpPumpingDataStorer
 {
     public void Store(IEnumerable<PumpingData> data);
 }
