@@ -7,7 +7,7 @@ namespace MarketOps.DataPump.Storers.Pg.Construction;
 /// <summary>
 /// Registers module.
 /// </summary>
-internal static class ServicesConfiguration
+public static class ServicesConfiguration
 {
     public static IServiceCollection RegisterPgStorer(this IServiceCollection services)
     {

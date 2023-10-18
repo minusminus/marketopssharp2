@@ -9,7 +9,7 @@ namespace MarketOps.DataPump.Providers.Bossa.Construction;
 /// <summary>
 /// Registers module.
 /// </summary>
-internal static class ServicesConfiguration
+public static class ServicesConfiguration
 {
     public static IServiceCollection RegisterBossaProvider(this IServiceCollection services)
     {
