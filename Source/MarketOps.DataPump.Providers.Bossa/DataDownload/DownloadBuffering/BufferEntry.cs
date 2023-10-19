@@ -26,5 +26,5 @@ internal abstract class BufferEntry : IDisposable
 
     protected abstract void DisposeManagedObjects();
 
-    public abstract StreamReader GetStream();
+    public abstract StreamReader? GetStream();
 }

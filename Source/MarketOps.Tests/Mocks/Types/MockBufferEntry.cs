@@ -16,7 +16,7 @@ internal class MockBufferEntry : BufferEntry
         _contentStream = new MemoryStream(contentArray);
     }
 
-    public override StreamReader GetStream() =>
+    public override StreamReader? GetStream() =>
         new(_contentStream);
 
     protected override void DisposeManagedObjects()

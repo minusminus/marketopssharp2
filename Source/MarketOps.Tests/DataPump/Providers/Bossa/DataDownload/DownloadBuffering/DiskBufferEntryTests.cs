@@ -10,6 +10,8 @@ internal class DiskBufferEntryTests
     private const string TestContent = "some test content";
     private const string StockName = nameof(StockName);
     private const string StockFileName = $"{StockName}.mst";
+    private const string NotExistingStockName = nameof(NotExistingStockName);
+    private const string NotExistingStockFileName = $"{NotExistingStockName}.mst";
     private string _zipFilePath;
 
     [OneTimeSetUp]
@@ -45,6 +47,15 @@ internal class DiskBufferEntryTests
         CheckBufferEntry(result2);
     }
 
+    [Test]
+    public void GetStream_NotExistingStock__ReturnsNull()
+    {
+        using var result = DiskBufferEntry.Create(_zipFilePath, NotExistingStockFileName);
+
+        result.ShouldNotBeNull();
+        result.GetStream().ShouldBeNull();
+    }
+
     private static void CreateZipFile(string zipPath)
     {
         using var fs = new FileStream(zipPath, FileMode.Create);
@@ -58,6 +69,6 @@ internal class DiskBufferEntryTests
     private static void CheckBufferEntry(BufferEntry result)
     {
         result.ShouldNotBeNull();
-        result.GetStream().ReadToEnd().Trim().ShouldBe(TestContent);
+        result.GetStream()!.ReadToEnd().Trim().ShouldBe(TestContent);
     }
 }

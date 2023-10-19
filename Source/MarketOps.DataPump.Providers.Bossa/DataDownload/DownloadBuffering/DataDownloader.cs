@@ -1,6 +1,7 @@
 ﻿using MarketOps.DataPump.Common;
 using MarketOps.DataPump.Providers.Bossa.Processing;
 using MarketOps.Types;
+using Microsoft.Extensions.Logging;
 
 namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 
@@ -10,10 +11,12 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 internal class DataDownloader : IDataDownloader
 {
     private readonly IDownloadBuffer _downloadBuffer;
+    private readonly ILogger _logger;
 
-    public DataDownloader(IDownloadBuffer downloadBuffer)
+    public DataDownloader(IDownloadBuffer downloadBuffer, ILogger logger)
     {
         _downloadBuffer = downloadBuffer;
+        _logger = logger;
     }
 
     public IEnumerable<string> GetLines(PumpingDataRange dataRange, StockDefinitionShort stockDefinition) =>
@@ -25,11 +28,19 @@ internal class DataDownloader : IDataDownloader
 
     private IEnumerable<string> GetDailyLines(StockDefinitionShort stockDefinition)
     {
-        using var bufferEntry = _downloadBuffer.GetFile(PumpingDataRange.Daily, stockDefinition);
+        using var bufferEntry = GetEntryFromBuffer(stockDefinition);
         using var streamReader = bufferEntry.GetStream();
+        if (streamReader is null)
+        {
+            _logger.LogWarning("Missing data file for id={Id} [{Name}]", stockDefinition.Id, stockDefinition.Name);
+            yield break;
+        }
         if (!streamReader.EndOfStream)
             streamReader.ReadLine();
         while (!streamReader.EndOfStream)
             yield return streamReader.ReadLine() ?? string.Empty;
     }
+
+    private BufferEntry GetEntryFromBuffer(StockDefinitionShort stockDefinition) => 
+        _downloadBuffer.GetFile(PumpingDataRange.Daily, stockDefinition);
 }
