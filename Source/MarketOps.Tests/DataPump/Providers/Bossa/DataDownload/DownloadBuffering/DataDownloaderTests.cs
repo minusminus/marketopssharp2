@@ -18,7 +18,7 @@ $@"{TestContentHeader}
 {StockName},20191029,0.8100,0.8100,0.8000,0.8000,1735
 {StockName},20191030,0.7800,0.7800,0.7800,0.7800,500
 {StockName},20191031,0.7800,0.7800,0.7800,0.7800,1415";
-    private readonly StockDefinitionShort _stockDefinitionShort = new(1, StockType.Stock, StockName);
+    private readonly StockDefinitionShort _stockDefinitionShort = new(1, StockType.Stock, StockName, DateTime.Now);
 
     private IDownloadBuffer _downloadBuffer = null!;
     private DataDownloader _testObj = null!;

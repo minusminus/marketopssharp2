@@ -29,7 +29,7 @@ internal class PgDataPumpStorerTests
     [Test]
     public void Store__ExecutesCorrectly([Values(1, 2)] int count)
     {
-        var stockDefinition = new Types.StockDefinitionShort(1, Types.StockType.Stock, "stock");
+        var stockDefinition = new Types.StockDefinitionShort(1, Types.StockType.Stock, "stock", DateTime.Now);
         var pumpingData = new PumpingData(PumpingDataRange.Daily, stockDefinition, "1.2345", "3.9768", "0.8700", "2.5000", "1234", "20231017");
         var data = Enumerable.Range(1, count).Select(_ => pumpingData);
 

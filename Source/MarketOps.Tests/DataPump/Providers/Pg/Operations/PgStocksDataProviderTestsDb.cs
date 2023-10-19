@@ -32,6 +32,6 @@ internal class PgStocksDataProviderTestsDb
 
         Console.WriteLine($"Results count: {result.Count}");
         foreach (var item in result)
-            Console.WriteLine($"{item.Id}: {item.Name} [{item.Type}]");
+            Console.WriteLine($"{item.Id}: {item.Name} [{item.Type}], lastTs: {item.LastTs}");
     }
 }

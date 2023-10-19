@@ -19,10 +19,10 @@ internal class BossaDataProvider : IDataPumpPumpingDataProvider
         _logger = logger;
     }
 
-    public IEnumerable<PumpingData> Get(DateTime lastTs, PumpingDataRange dataRange, StockDefinitionShort stockDefinition) => 
+    public IEnumerable<PumpingData> Get(PumpingDataRange dataRange, StockDefinitionShort stockDefinition) => 
         _dataDownloader.GetLines(dataRange, stockDefinition)
             .Split()
             .Verify(dataRange, _logger)
-            .FilterOutToDate(lastTs, dataRange)
+            .FilterOutToDate(stockDefinition.LastTs, dataRange)
             .ToPumpingData(dataRange, stockDefinition);
 }

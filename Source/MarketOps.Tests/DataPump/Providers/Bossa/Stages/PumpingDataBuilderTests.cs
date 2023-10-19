@@ -11,7 +11,7 @@ namespace MarketOps.Tests.DataPump.Providers.Bossa.Stages;
 internal class PumpingDataBuilderTests
 {
     private readonly PumpingDataRange dataRange = PumpingDataRange.Daily;
-    private readonly StockDefinitionShort stockDefinitionShort = new(1, StockType.Stock, "test");
+    private readonly StockDefinitionShort stockDefinitionShort = new(1, StockType.Stock, "test", DateTime.Now);
     private readonly IFixture fixture = FixtureFactory.Get();
 
     [Test]

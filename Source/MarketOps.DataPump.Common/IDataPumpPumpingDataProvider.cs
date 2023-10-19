@@ -7,5 +7,5 @@ namespace MarketOps.DataPump.Common;
 /// </summary>
 public interface IDataPumpPumpingDataProvider
 {
-    public IEnumerable<PumpingData> Get(DateTime lastTs, PumpingDataRange dataRange, StockDefinitionShort stockDefinition);
+    public IEnumerable<PumpingData> Get(PumpingDataRange dataRange, StockDefinitionShort stockDefinition);
 }

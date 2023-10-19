@@ -9,7 +9,7 @@ namespace MarketOps.Tests.DataPump.Providers.Bossa.DataDownload.DownloadBufferin
 internal class DiskBufferTests
 {
     private const string StockName = nameof(StockName);
-    private readonly StockDefinitionShort _stockDefinitionShort = new(1, StockType.Stock, StockName);
+    private readonly StockDefinitionShort _stockDefinitionShort = new(1, StockType.Stock, StockName, DateTime.Now);
     private readonly MemoryStream _archiveStream = new();
 
     private IBossaDownloader _downloader = null!;

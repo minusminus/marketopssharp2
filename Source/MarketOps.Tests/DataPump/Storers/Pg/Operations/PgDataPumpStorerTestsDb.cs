@@ -32,7 +32,7 @@ internal class PgDataPumpStorerTestsDb
         var data = Enumerable.Range(1, count)
             .Select(i =>
             {
-                var stockDefinition = new Types.StockDefinitionShort(i, Types.StockType.Stock, "stock");
+                var stockDefinition = new Types.StockDefinitionShort(i, Types.StockType.Stock, "stock", DateTime.Now);
                 return new PumpingData(PumpingDataRange.Daily, stockDefinition, "1.2345", "3.9768", "0.8700", "2.5000", "1234", "20231017");
             });
 

@@ -8,7 +8,7 @@ using MarketOps.Types;
 namespace MarketOps.DataPump.Providers.Pg.Operations;
 
 /// <summary>
-/// Gets stocks data frmo Pg.
+/// Gets stocks data from Pg.
 /// </summary>
 internal class PgStocksDataProvider : PgOperationBase, IDataPumpStocksDataProvider
 {
@@ -23,9 +23,11 @@ internal class PgStocksDataProvider : PgOperationBase, IDataPumpStocksDataProvid
     }
 
     private static string PrepareQuery(StockType stockType) => $@"
-select {Stocks.Id} as ""Id"", {Stocks.StockType} as ""Type"", {Stocks.StockName} as ""Name""
-from {Tables.Stocks}
-where {Stocks.Enabled} = true and {Stocks.StockType} = {(int)stockType}
-order by {Stocks.Id}
+select s.{Stocks.Id} as ""Id"", s.{Stocks.StockType} as ""Type"", s.{Stocks.StockName} as ""Name"", max(d.{Daily.Ts}) as ""LastTs""
+from {Tables.Stocks} s
+left join {TablesSelector.GetDailyTable(stockType)} d on d.{Daily.FkStockId} = s.{Stocks.Id}
+where s.{Stocks.Enabled} = true and s.{Stocks.StockType} = {(int)stockType}
+group by s.{Stocks.Id}, s.{Stocks.StockType}, s.{Stocks.StockName}
+order by s.{Stocks.Id}
 ";
 }
