@@ -4,18 +4,18 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 
 internal class BossaConfigurationReaderException : DataPumpException
 {
-    private readonly string _configurationFilePath;
+    public readonly string ConfigurationFilePath;
 
     public BossaConfigurationReaderException(string configurationFilePath)
         : base(GetMessage(configurationFilePath))
     {
-        _configurationFilePath = configurationFilePath;
+        ConfigurationFilePath = configurationFilePath;
     }
 
     public BossaConfigurationReaderException(string configurationFilePath, Exception innerException)
         : base(GetMessage(configurationFilePath), innerException)
     {
-        _configurationFilePath = configurationFilePath;
+        ConfigurationFilePath = configurationFilePath;
     }
 
     private static string GetMessage(in string configurationFilePath) =>
