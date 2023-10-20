@@ -9,6 +9,7 @@ class Program
     {
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration(configurationBuilder => configurationBuilder.ConfigureAppConfig())
+            .ConfigureLogging(loggingBuilder => loggingBuilder.ConfigureLogging())
             .ConfigureServices((context, services) => services.RegisterServices(context.Configuration))
             .Build();
 
