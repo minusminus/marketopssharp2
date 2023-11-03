@@ -12,6 +12,7 @@ internal static class ServicesConfiguration
 {
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration) =>
         services
+            .AddHttpClient()
             .RegisterPostgress(configuration)
             .RegisterPgStocksProvider()
             .RegisterPgStorer()

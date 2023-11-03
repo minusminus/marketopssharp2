@@ -6,7 +6,7 @@ namespace MarketOps.DataPump.Providers.Bossa.Stages;
 
 /// <summary>
 /// Verifies splitted line.
-/// For incorrect line logs error and filters the line out.
+/// For incorrect line logs error and filters it out.
 /// </summary>
 internal static class LinesVerifier
 {
@@ -39,7 +39,7 @@ internal static class LinesVerifier
     }
 
     private static void LogLineError(in string[] line, ILogger logger) => 
-        logger.LogError("Incorrect data line: {Line}", string.Join(',', line));
+        logger.LogError("Incorrect data line: {Line}", string.Join(BossaDaily.FieldsSeparator, line));
 
     private static bool OnlyDigits(in string value) =>
         value.All(c => char.IsDigit(c));

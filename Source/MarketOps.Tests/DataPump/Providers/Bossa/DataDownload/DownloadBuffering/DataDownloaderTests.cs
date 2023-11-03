@@ -22,14 +22,14 @@ $@"{TestContentHeader}
     private readonly StockDefinitionShort _stockDefinitionShort = new(1, StockType.Stock, StockName, DateTime.Now);
 
     private IDownloadBuffer _downloadBuffer = null!;
-    private ILogger _logger = null!;
+    private ILogger<DataDownloader> _logger = null!;
     private DataDownloader _testObj = null!;
 
     [SetUp]
     public void SetUp()
     {
         _downloadBuffer = Substitute.For<IDownloadBuffer>();
-        _logger = Substitute.For<ILogger>();
+        _logger = Substitute.For<ILogger<DataDownloader>>();
         _testObj = new DataDownloader(_downloadBuffer, _logger);
     }
 

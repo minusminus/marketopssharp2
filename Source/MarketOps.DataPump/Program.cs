@@ -1,11 +1,13 @@
-﻿using MarketOps.DataPump.SetUp;
+﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.SetUp;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace MarketOps.DataPump;
 
-class Program
+internal class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration(configurationBuilder => configurationBuilder.ConfigureAppConfig())
@@ -13,6 +15,11 @@ class Program
             .ConfigureServices((context, services) => services.RegisterServices(context.Configuration))
             .Build();
 
-        host.Run();
+        var mainTask = host.RunAsync();
+
+        var executor = host.Services.GetRequiredService<IDataPumpExecutor>();
+        executor.Execute(Types.StockType.Index);
+
+        await mainTask;
     }
 }

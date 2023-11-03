@@ -32,7 +32,11 @@ internal class StandardExecutor : IDataPumpExecutor
         foreach (var stockData in stocksData)
         {
             var pumpingData = _pumpingDataProvider.Get(PumpingDataRange.Daily, stockData);
-            _pumpingDataStorer.Store(pumpingData);
+            foreach (var data in pumpingData)
+            {
+                Console.WriteLine($"{data.StockDefinition.Name}: {data.Ts}");
+            }
+            //_pumpingDataStorer.Store(pumpingData);
         }
     }
 }

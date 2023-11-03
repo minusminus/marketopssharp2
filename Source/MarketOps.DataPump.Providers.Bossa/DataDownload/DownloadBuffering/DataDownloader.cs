@@ -11,9 +11,9 @@ namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 internal class DataDownloader : IDataDownloader
 {
     private readonly IDownloadBuffer _downloadBuffer;
-    private readonly ILogger _logger;
+    private readonly ILogger<DataDownloader> _logger;
 
-    public DataDownloader(IDownloadBuffer downloadBuffer, ILogger logger)
+    public DataDownloader(IDownloadBuffer downloadBuffer, ILogger<DataDownloader> logger)
     {
         _downloadBuffer = downloadBuffer;
         _logger = logger;

@@ -11,9 +11,9 @@ namespace MarketOps.DataPump.Providers.Bossa.Processing;
 internal class BossaDataProvider : IDataPumpPumpingDataProvider
 {
     private readonly IDataDownloader _dataDownloader;
-    private readonly ILogger _logger;
+    private readonly ILogger<BossaDataProvider> _logger;
 
-    public BossaDataProvider(IDataDownloader dataDownloader, ILogger logger)
+    public BossaDataProvider(IDataDownloader dataDownloader, ILogger<BossaDataProvider> logger)
     {
         _dataDownloader = dataDownloader;
         _logger = logger;
