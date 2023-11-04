@@ -40,13 +40,10 @@ internal class IterativeExecutor : IDataPumpExecutor
         var stocksData = _stocksDataProvider.GetAllActive(stockType);
         foreach (var stockData in stocksData)
         {
-            _logger.LogInformation("[{ExecutorName}] processing data file for id={Id} [{Name}]", nameof(IterativeExecutor), stockData.Id, stockData.Name);
+            _logger.LogInformation("[{ExecutorName}] processing data file for id={Id} [{Name}] from last ts {Ts}",
+                nameof(IterativeExecutor), stockData.Id, stockData.Name, stockData.LastTs.ToString("yyyy-MM-dd"));
             var pumpingData = _pumpingDataProvider.Get(PumpingDataRange.Daily, stockData);
-            foreach (var data in pumpingData)
-            {
-                //Console.WriteLine($"{data.StockDefinition.Name}: {data.Ts}");
-            }
-            //_pumpingDataStorer.Store(pumpingData);
+            _pumpingDataStorer.Store(pumpingData);
         }
     }
 }
