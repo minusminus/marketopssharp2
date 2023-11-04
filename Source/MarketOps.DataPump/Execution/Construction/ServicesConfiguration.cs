@@ -11,7 +11,7 @@ public static class ServicesConfiguration
 {
     public static IServiceCollection RegisterExecutor(this IServiceCollection services)
     {
-        services.AddTransient<IDataPumpExecutor, StandardExecutor>();
+        services.AddTransient<IDataPumpExecutor, IterativeExecutor>();
         return services;
     }
 }

@@ -26,7 +26,7 @@ internal class LinesVerifierTests
     }
 
     [Test]
-    public void Verify_Daily__AllCorrect__ReturnsAll()
+    public void Verify_Daily_AllCorrect__ReturnsAll()
     {
         List<string[]> testCase = new()
         {
@@ -34,12 +34,29 @@ internal class LinesVerifierTests
             new string[] {"ADATEX", "20221202", "0.3000", "0.3020", "0.3000", "0.3000", "78665"},
             new string[] {"ADATEX", "20221205", "0.3240", "0.3800", "0.3000", "0.3000", "326891"},
             new string[] {"ADATEX", "20221206", "0.3000", "0.3000", "0.2920", "0.2920", "30215"},
+            new string[] {"WIG", "20230912", "66612.0800", "66690.0900", "66183.5900", "66559.8500", "997642.400"},
+            new string[] {"FW20WS", "20231030", "2124", "2154", "2124", "2141", "33667", "61333"}
         };
 
         var result = LinesVerifier.Verify(testCase, PumpingDataRange.Daily, logger).ToList();
 
         result.ShouldBe(testCase);
         CheckLoggerCalls(0);
+    }
+
+    [Test]
+    public void Verify_Daily_IncorrectLineLength__SkipsIncorrectLines()
+    {
+        List<string[]> testCase = new()
+        {
+            new string[] {"ADATEX", "20221201", "0.2980", "0.3280", "0.2980", "0.3000"},    //one col missing
+            new string[] {"FW20WS", "20231030", "2124", "2154", "2124", "2141", "33667", "61333", "12345"} //one col added
+        };
+
+        var result = LinesVerifier.Verify(testCase, PumpingDataRange.Daily, logger).ToList();
+
+        result.ShouldBeEmpty();
+        CheckLoggerCalls(testCase.Count);
     }
 
     [TestCase("2022120")]
@@ -105,8 +122,7 @@ internal class LinesVerifierTests
     [TestCase("   ")]
     [TestCase("abcd")]
     [TestCase("2400X")]
-    [TestCase("24000.0")]
-    public void Verify_Daily_IncorectVolumee__SkipsIncorrectLine(string value)
+    public void Verify_Daily_IncorectVolume__SkipsIncorrectLine(string value)
     {
         List<string[]> testCase = new()
         {

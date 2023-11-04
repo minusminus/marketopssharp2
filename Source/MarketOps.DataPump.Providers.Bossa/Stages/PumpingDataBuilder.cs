@@ -23,7 +23,15 @@ internal static class PumpingDataBuilder
             lines[BossaDailyIndex.High],
             lines[BossaDailyIndex.Low],
             lines[BossaDailyIndex.Close],
-            lines[BossaDailyIndex.Volume],
+            IntegerPartOnly(lines[BossaDailyIndex.Volume]),
             lines[BossaDailyIndex.Dt]
         );
+
+    private static string IntegerPartOnly(in string value)
+    {
+        int separatorIndex = value.IndexOf(BossaDaily.NumberSeparator);
+        return (separatorIndex == -1)
+            ? value
+            : value[..separatorIndex];
+    }
 }

@@ -28,13 +28,13 @@ internal static class LinesVerifier
 
     private static bool IsDailyLineCorrect(in string[] line)
     {
-        if (line.Length != BossaDaily.FieldsInLine) return false;
+        if ((line.Length != BossaDaily.StandardFieldsInLine) && (line.Length != BossaDaily.StockType2FieldsInLine)) return false;
         if ((line[BossaDailyIndex.Dt].Length != BossaDaily.DtLength) || (!OnlyDigits(line[BossaDailyIndex.Dt]))) return false;
         if (string.IsNullOrWhiteSpace(line[BossaDailyIndex.Open]) || !DigitsWithSingleSeparator(line[BossaDailyIndex.Open], BossaDaily.NumberSeparator)) return false;
         if (string.IsNullOrWhiteSpace(line[BossaDailyIndex.High]) || !DigitsWithSingleSeparator(line[BossaDailyIndex.High], BossaDaily.NumberSeparator)) return false;
         if (string.IsNullOrWhiteSpace(line[BossaDailyIndex.Low]) || !DigitsWithSingleSeparator(line[BossaDailyIndex.Low], BossaDaily.NumberSeparator)) return false;
         if (string.IsNullOrWhiteSpace(line[BossaDailyIndex.Close]) || !DigitsWithSingleSeparator(line[BossaDailyIndex.Close], BossaDaily.NumberSeparator)) return false;
-        if (string.IsNullOrWhiteSpace(line[BossaDailyIndex.Volume]) || !OnlyDigits(line[BossaDailyIndex.Volume])) return false;
+        if (string.IsNullOrWhiteSpace(line[BossaDailyIndex.Volume]) || !DigitsWithSingleSeparator(line[BossaDailyIndex.Volume], BossaDaily.NumberSeparator)) return false;
         return true;
     }
 

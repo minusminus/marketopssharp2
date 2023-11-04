@@ -18,7 +18,7 @@ internal class Program
         var mainTask = host.RunAsync();
 
         var executor = host.Services.GetRequiredService<IDataPumpExecutor>();
-        executor.Execute(Types.StockType.Index);
+        executor.Execute(Types.StockType.IndexFuture);
 
         await mainTask;
     }
