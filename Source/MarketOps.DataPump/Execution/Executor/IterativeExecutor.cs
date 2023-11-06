@@ -43,7 +43,18 @@ internal class IterativeExecutor : IDataPumpExecutor
             _logger.LogInformation("[{ExecutorName}] processing data file for id={Id} [{Name}] from last ts {Ts}",
                 nameof(IterativeExecutor), stockData.Id, stockData.Name, stockData.LastTs.ToString("yyyy-MM-dd"));
             var pumpingData = _pumpingDataProvider.Get(PumpingDataRange.Daily, stockData);
+            StoreData(pumpingData);
+        }
+    }
+
+    private void StoreData(IEnumerable<PumpingData> pumpingData)
+    {
+        try
+        {
             _pumpingDataStorer.Store(pumpingData);
+        } catch(Exception e)
+        {
+            _logger.LogError(e, "[{ExecutorName}] exception on storing data: {ExceptionMessage}", nameof(IterativeExecutor), e.Message);
         }
     }
 }
