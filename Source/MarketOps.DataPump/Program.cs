@@ -11,20 +11,24 @@ internal class Program
 {
     static async Task Main(string[] args)
     {
+        ExecutionOptions executionOptions = new();
+
+        await DefineCommand.Define(executionOptions)
+            .InvokeAsync(args);
+
+        if (!executionOptions.ParsedCorrectly) return;
+
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration(configurationBuilder => configurationBuilder.ConfigureAppConfig())
             .ConfigureLogging(loggingBuilder => loggingBuilder.ConfigureLogging())
-            .ConfigureServices((context, services) => services.RegisterServices(context.Configuration))
+            .ConfigureServices((context, services) => services.RegisterServices(context.Configuration, executionOptions.SimulateStore))
             .Build();
 
-        //var mainTask = host.RunAsync();
+        var mainTask = host.RunAsync();
+        
+        var executor = host.Services.GetRequiredService<IDataPumpExecutor>();
+        executor.Execute(executionOptions.StockTypes);
 
-        //var executor = host.Services.GetRequiredService<IDataPumpExecutor>();
-        //executor.Execute(Types.StockType.IndexFuture);
-
-        //await mainTask;
-
-        await DefineCommands.Define()
-            .InvokeAsync(args);
+        await mainTask;
     }
 }
