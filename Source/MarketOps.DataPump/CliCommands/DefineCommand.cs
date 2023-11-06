@@ -4,6 +4,10 @@ using System.CommandLine;
 
 namespace MarketOps.DataPump.CliCommands;
 
+/// <summary>
+/// Command line command definition.
+/// Properly parsed arguments are rewritten to ExecutionOptions to be used in processing.
+/// </summary>
 internal static class DefineCommand
 {
     public static RootCommand Define(ExecutionOptions executionOptions)
@@ -24,12 +28,12 @@ internal static class DefineCommand
 
     private static Argument<StockType[]> CreateArgumentStockTypes(this Command command)
     {
-        const string argumentName = "stockTypes";
-
-        var argument = new Argument<StockType[]>(argumentName,
+        var argument = new Argument<StockType[]>("stockTypes",
             description: "List of comma separated stock types to process.\nAll active stocks of selected types are processed.",
-            parse: argumentResult => ParseStockTypesToken(argumentResult));
-        argument.Arity = ArgumentArity.ExactlyOne;
+            parse: argumentResult => ParseStockTypesToken(argumentResult))
+        {
+            Arity = ArgumentArity.ExactlyOne
+        };
 
         command.AddArgument(argument);
         return argument;

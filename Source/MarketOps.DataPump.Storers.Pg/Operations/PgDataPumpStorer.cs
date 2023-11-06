@@ -16,14 +16,17 @@ internal class PgDataPumpStorer : PgOperationBase, IDataPumpPumpingDataStorer
     public PgDataPumpStorer(IPgConnectionFactory pgConnectionFactory) : base(pgConnectionFactory)
     { }
 
-    public void Store(IEnumerable<PumpingData> data)
+    public void Store(IEnumerable<PumpingData> data, CancellationToken stoppingToken)
     {
         using var connection = CreateAndOpenConnection();
         foreach (var pumpingData in data)
+        {
+            if (stoppingToken.IsCancellationRequested) break;
             StorePumpingData(connection, pumpingData);
+        }
     }
 
-    private void StorePumpingData(IDbConnection connection, PumpingData pumpingData) => 
+    private static void StorePumpingData(IDbConnection connection, PumpingData pumpingData) => 
         connection.Execute(PrepareQuery(pumpingData.StockDefinition.Type), PrepareParameters(pumpingData));
 
     private static string PrepareQuery(StockType stockType) => $@"
@@ -44,7 +47,7 @@ values
 @{Daily.Close},
 @{Daily.Volume})";
 
-    private DynamicParameters PrepareParameters(PumpingData pumpingData) =>
+    private static DynamicParameters PrepareParameters(PumpingData pumpingData) =>
         new DynamicParameters()
             .AddInParamInt("@" + Daily.FkStockId, pumpingData.StockDefinition.Id)
             .AddInParamDateTime("@" + Daily.Ts, PrepareTs(pumpingData.Ts))

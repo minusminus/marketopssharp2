@@ -7,5 +7,5 @@ namespace MarketOps.DataPump.Common;
 /// </summary>
 public interface IDataPumpExecutor
 {
-    public void Execute(params StockType[] stockTypes);
+    public void Execute(CancellationToken stoppingToken, params StockType[] stockTypes);
 }

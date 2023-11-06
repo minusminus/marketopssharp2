@@ -21,14 +21,9 @@ internal class Program
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration(configurationBuilder => configurationBuilder.ConfigureAppConfig())
             .ConfigureLogging(loggingBuilder => loggingBuilder.ConfigureLogging())
-            .ConfigureServices((context, services) => services.RegisterServices(context.Configuration, executionOptions.SimulateStore))
+            .ConfigureServices((context, services) => services.RegisterServices(context.Configuration, executionOptions))
             .Build();
 
-        var mainTask = host.RunAsync();
-        
-        var executor = host.Services.GetRequiredService<IDataPumpExecutor>();
-        executor.Execute(executionOptions.StockTypes);
-
-        await mainTask;
+        await host.RunAsync();
     }
 }

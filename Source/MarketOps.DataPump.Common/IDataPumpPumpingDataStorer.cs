@@ -5,5 +5,5 @@
 /// </summary>
 public interface IDataPumpPumpingDataStorer
 {
-    public void Store(IEnumerable<PumpingData> data);
+    public void Store(IEnumerable<PumpingData> data, CancellationToken stoppingToken);
 }

@@ -36,6 +36,6 @@ internal class PgDataPumpStorerTestsDb
                 return new PumpingData(PumpingDataRange.Daily, stockDefinition, "1.2345", "3.9768", "0.8700", "2.5000", "1234", "20231017");
             });
 
-        _testObj.Store(data);
+        _testObj.Store(data, CancellationToken.None);
     }
 }

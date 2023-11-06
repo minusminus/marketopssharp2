@@ -1,8 +1,10 @@
 ﻿using MarketOps.Common.Pg.Construction;
+using MarketOps.DataPump.CliCommands;
 using MarketOps.DataPump.Common;
 using MarketOps.DataPump.Execution.Construction;
 using MarketOps.DataPump.Providers.Bossa.Construction;
 using MarketOps.DataPump.Providers.Pg.Construction;
+using MarketOps.DataPump.Services;
 using MarketOps.DataPump.Storers;
 using MarketOps.DataPump.Storers.Pg.Construction;
 using Microsoft.Extensions.Configuration;
@@ -13,16 +15,18 @@ namespace MarketOps.DataPump.SetUp;
 internal static class ServicesConfiguration
 {
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration,
-        bool simulateStore) =>
+        ExecutionOptions executionOptions) =>
         services
             .AddHttpClient()
+            .AddSingleton(executionOptions)
             .RegisterPostgress(configuration)
             .RegisterPgStocksProvider()
-            .RegisterStorer(simulateStore)
+            .RegisterProperStorer(executionOptions.SimulateStore)
             .RegisterBossaProvider()
-            .RegisterExecutor();
+            .RegisterExecutor()
+            .AddHostedService<DataPumpExecutorService>();
 
-    private static IServiceCollection RegisterStorer(this IServiceCollection services, bool simulateStore)
+    private static IServiceCollection RegisterProperStorer(this IServiceCollection services, bool simulateStore)
     {
         if (simulateStore)
             services.RegisterMockStorer();
