@@ -9,7 +9,7 @@ namespace MarketOps.DataPump;
 
 internal class Program
 {
-    static async Task Main(string[] args)
+    public static async Task Main(string[] args)
     {
         ExecutionOptions executionOptions = new();
 

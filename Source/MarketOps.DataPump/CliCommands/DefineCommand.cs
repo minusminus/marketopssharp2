@@ -29,7 +29,7 @@ internal static class DefineCommand
     private static Argument<StockType[]> CreateArgumentStockTypes(this Command command)
     {
         var argument = new Argument<StockType[]>("stockTypes",
-            description: "List of comma separated stock types to process.\nAll active stocks of selected types are processed.",
+            description: $"List of comma separated stock types to process:\n[{string.Join(", ", Enum.GetNames(typeof(StockType)))}].\nAll active stocks of selected types are processed.",
             parse: argumentResult => ParseStockTypesToken(argumentResult))
         {
             Arity = ArgumentArity.ExactlyOne
