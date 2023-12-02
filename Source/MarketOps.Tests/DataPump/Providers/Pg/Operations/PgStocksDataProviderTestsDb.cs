@@ -26,12 +26,24 @@ internal class PgStocksDataProviderTestsDb
     }
 
     [Test(Description = "Check db after execution")]
-    public void GetAllActive__GetFromPg()
+    public void GetAllActive_NoFilter__GetsFromPg()
     {
         var result = _testObj.GetAllActive(Types.StockType.Stock).ToList();
 
+        result.Count.ShouldBeGreaterThan(0);
         Console.WriteLine($"Results count: {result.Count}");
         foreach (var item in result)
             Console.WriteLine($"{item.Id}: {item.Name} [{item.Type}], lastTs: {item.LastTs}");
+    }
+
+    [Test(Description = "Check db after execution")]
+    public void GetAllActive_WithStockNamePrefix__GetsFromPg()
+    {
+        var result = _testObj.GetAllActive(Types.StockType.Stock, "Other").ToList();
+
+        result.Count.ShouldBeGreaterThan(0);
+        Console.WriteLine($"Results count: {result.Count}");
+        foreach (var item in result)
+            Console.WriteLine($"{item.Id}: {item.Name} [{item.Type}]");
     }
 }

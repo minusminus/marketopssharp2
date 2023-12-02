@@ -1,0 +1,31 @@
+{
+  "downloadPath": "https://www.pkotfi.pl/media_files/tfi/notowania_pl.csv",
+  "stocksMapping": {
+    "PKO001": "PKO Zrównoważony",
+    "PKO002": "PKO Dynamicznej Alokacji",
+    "PKO005": "PKO Obligacji Skarbowych Krótkoterminowy",
+    "PKO008": "PKO Akcji Nowa Europa",
+    "PKO014": "PKO Obligacji Skarbowych Długoterminowy",
+    "PKO015": "PKO Akcji Małych i Średnich Spółek",
+    "PKO020": "PKO Strategicznej Alokacji",
+    "PKO021": "PKO Akcji Polskich Plus",
+    "PKO026": "PKO Surowców Globalny",
+    "PKO027": "PKO Technologii i Innowacji Globalny",
+    "PKO028": "PKO Dóbr Luksusowych Globalny",
+    "PKO029": "PKO Infrastruktury i Budownictwa Globalny",
+    "PKO039": "PKO Obligacji Skarbowych Plus - fio",
+    "PKO057": "PKO Medycyny i Demografii Globalny",
+    "PKO072": "PKO Ekologii i Odpowiedzialności Społecznej Globalny",
+    "PKO073": "PKO Obligacji Samorządowych II",
+    "PKO074": "PKO Obligacji Globalny",
+    "PKO077": "PKO Obligacji Uniwersalny",
+    "PKO097": "PKO Akcji Dywidendowych Globalny",
+    "PKO098": "PKO Akcji Strefy Euro",
+    "PKO909": "PKO Akcji Rynku Złota",
+    "PKO910": "PKO Papierów Dłużnych USD",
+    "PKO913": "PKO Akcji Rynku Polskiego",
+    "PKO918": "PKO Akcji Rynku Amerykańskiego",
+    "PKO919": "PKO Akcji Rynku Japońskiego",
+    "PKO925": "PKO Akcji Rynków Wschodzących"
+  }
+}
