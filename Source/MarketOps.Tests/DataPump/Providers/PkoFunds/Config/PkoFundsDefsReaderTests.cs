@@ -7,18 +7,10 @@ namespace MarketOps.Tests.DataPump.Providers.PkoFunds.Config;
 [TestFixture]
 internal class PkoFundsDefsReaderTests
 {
-    private PkoFundsDefsReader _testObj = null!;
-
-    [SetUp]
-    public void SetUp()
-    {
-        _testObj = new PkoFundsDefsReader();
-    }
-
     [Test]
     public void Read__ReadsCorrectly()
     {
-        var result = _testObj.Read();
+        var result = PkoFundsDefsReader.Read();
 
         result.DownloadPath.ShouldNotBeNullOrEmpty();
         result.StocksMapping.Count.ShouldBeGreaterThan(0);
@@ -32,7 +24,7 @@ internal class PkoFundsDefsReaderTests
         File.Move(configFilePath, tempFilePath);
         try
         {
-            Should.Throw<PkoFundsConfigurationReaderException>(() => _testObj.Read());
+            Should.Throw<PkoFundsConfigurationReaderException>(() => PkoFundsDefsReader.Read());
         }
         finally
         {
