@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MarketOps.DataPump.Providers.PkoFunds.Common;
+namespace MarketOps.DataPump.Providers.PkoFunds.Config;
 
 /// <summary>
 /// PKO funds definitions.

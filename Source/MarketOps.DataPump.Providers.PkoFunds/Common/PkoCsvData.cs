@@ -1,0 +1,11 @@
+﻿namespace MarketOps.DataPump.Providers.PkoFunds.Common;
+
+/// <summary>
+/// PKO funds csv files' definition.
+/// </summary>
+internal static class PkoCsvData
+{
+    public const char FieldsSeparator = ';';
+
+    public const int DataIndex = 0;
+}

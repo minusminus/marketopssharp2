@@ -2,16 +2,16 @@
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using System.Text.Json;
 
-namespace MarketOps.DataPump.Providers.PkoFunds.Common;
+namespace MarketOps.DataPump.Providers.PkoFunds.Config;
 
 /// <summary>
-/// Reads PKo funds configuration from json.
+/// Reads PKO funds configuration from json.
 /// </summary>
-internal class PkoFundsDefsReader
+internal static class PkoFundsDefsReader
 {
     internal const string DefsFileName = "pkofunds.defs.json";
 
-    public PkoFundsDefs Read()
+    public static PkoFundsDefs Read()
     {
         var configFilePath = GetConfigFilePath();
         return DeserializeConfigFile(configFilePath)

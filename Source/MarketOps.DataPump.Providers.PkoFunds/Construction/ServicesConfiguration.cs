@@ -1,4 +1,8 @@
 ﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.PkoFunds.Config;
+using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Downloading;
+using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Processing;
+using MarketOps.DataPump.Providers.PkoFunds.Processing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MarketOps.DataPump.Providers.Bossa.Construction;
@@ -10,11 +14,12 @@ public static class ServicesConfiguration
 {
     public static IServiceCollection RegisterPkoFundsProvider(this IServiceCollection services)
     {
-        //services.AddSingleton<IBossaPathsConfigurationReader, PathsConfigurationReader>();
-        //services.AddSingleton<IBossaDownloader, BossaDownloader>();
-        //services.AddSingleton<IDownloadBuffer, DiskBuffer>();
-        //services.AddTransient<IDataDownloader, DataDownloader>();
-        //services.AddTransient<IDataPumpPumpingDataProvider, BossaDataProvider>();
+        var pkoFundsDefs = PkoFundsDefsReader.Read();
+        services.AddSingleton(pkoFundsDefs);
+
+        services.AddTransient<IPkoDownloader, PkoDownloader>();
+        services.AddTransient<IPkoDataReader, PkoDataReader>();
+        services.AddTransient<IDataPumpPumpingDataProvider, PkoDataProvider>();
         return services;
     }
 }

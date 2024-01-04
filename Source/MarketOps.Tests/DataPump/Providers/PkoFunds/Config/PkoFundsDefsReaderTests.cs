@@ -1,8 +1,8 @@
 ﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
-using MarketOps.DataPump.Providers.PkoFunds.Common;
+using MarketOps.DataPump.Providers.PkoFunds.Config;
 using System.Reflection;
 
-namespace MarketOps.Tests.DataPump.Providers.PkoFunds.Common;
+namespace MarketOps.Tests.DataPump.Providers.PkoFunds.Config;
 
 [TestFixture]
 internal class PkoFundsDefsReaderTests
