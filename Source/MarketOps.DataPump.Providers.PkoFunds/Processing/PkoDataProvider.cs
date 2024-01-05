@@ -1,4 +1,6 @@
 ﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.PkoFunds.Common;
+using MarketOps.DataPump.Providers.PkoFunds.Config;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Types;
 using MarketOps.Types;
 
@@ -9,23 +11,51 @@ namespace MarketOps.DataPump.Providers.PkoFunds.Processing;
 /// </summary>
 internal class PkoDataProvider : IDataPumpPumpingDataProvider
 {
-    private PkoFundsData? _data;
+    private readonly IPkoFundsDataBuffer _dataBuffer;
+    private readonly PkoFundsDefs _pkoFundsDefs;
 
-    private readonly IPkoDataReader _pkoDataReader;
-
-    public PkoDataProvider(IPkoDataReader pkoDataReader)
+    public PkoDataProvider(IPkoFundsDataBuffer dataBuffer, PkoFundsDefs pkoFundsDefs)
     {
-        _pkoDataReader = pkoDataReader;
+        _dataBuffer = dataBuffer;
+        _pkoFundsDefs = pkoFundsDefs;
     }
 
     public IEnumerable<PumpingData> Get(PumpingDataRange dataRange, StockDefinitionShort stockDefinition)
     {
-        throw new NotImplementedException();
+        var data = _dataBuffer.Get();
+        var (fundIndex, tsIndex) = FindDataStartingIndex(data, stockDefinition);
+
+        return CreatePumpingData(fundIndex, tsIndex, data, dataRange, stockDefinition);
     }
 
-    private PkoFundsData GetData()
+    private (int fundIndex, int tsIndex) FindDataStartingIndex(PkoFundsData data, StockDefinitionShort stockDefinition)
     {
-        _data ??= _pkoDataReader.Read();
-        return _data;
+        var fundName = _pkoFundsDefs.StocksMapping[stockDefinition.Name];
+
+        var fundIndex = data.FundNameToIndex[fundName];
+        var tsIndex = data.DateToIndex[stockDefinition.LastTs.ToString(PkoCsvData.DateFormat)];
+
+        return (fundIndex, tsIndex);
+    }
+
+    private static IEnumerable<PumpingData> CreatePumpingData(int fundIndex, int tsIndex, PkoFundsData data, PumpingDataRange dataRange, StockDefinitionShort stockDefinition)
+    {
+        tsIndex--;
+        while (tsIndex >= 0)
+        {
+            var priceValue = data.Data[tsIndex][fundIndex];
+            if (!string.IsNullOrEmpty(priceValue))
+                yield return new(
+                    dataRange,
+                    stockDefinition,
+                    priceValue,
+                    priceValue,
+                    priceValue,
+                    priceValue,
+                    "0",
+                    data.Data[tsIndex][PkoCsvData.DataIndex]);
+
+            tsIndex--;
+        }
     }
 }

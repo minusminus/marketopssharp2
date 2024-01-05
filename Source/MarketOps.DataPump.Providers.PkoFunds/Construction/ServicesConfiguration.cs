@@ -1,5 +1,6 @@
 ﻿using MarketOps.DataPump.Common;
 using MarketOps.DataPump.Providers.PkoFunds.Config;
+using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Buffering;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Downloading;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Processing;
 using MarketOps.DataPump.Providers.PkoFunds.Processing;
@@ -19,6 +20,8 @@ public static class ServicesConfiguration
 
         services.AddTransient<IPkoDownloader, PkoDownloader>();
         services.AddTransient<IPkoDataReader, PkoDataReader>();
+        services.AddSingleton<IPkoFundsDataBuffer, PkoFundsDataBuffer>();
+
         services.AddTransient<IDataPumpPumpingDataProvider, PkoDataProvider>();
         return services;
     }

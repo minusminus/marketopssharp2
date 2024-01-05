@@ -2,7 +2,7 @@
 
 namespace MarketOps.Tests.DataPump.Providers.PkoFunds.TestDataTools;
 
-internal static class PkofundsDefsTools
+internal static class PkoFundsDefsTools
 {
     public static PkoFundsDefs Get() =>
         new()
