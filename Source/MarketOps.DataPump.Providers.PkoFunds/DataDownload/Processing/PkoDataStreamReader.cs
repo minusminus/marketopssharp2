@@ -35,7 +35,7 @@ internal static class PkoDataStreamReader
             .ToArray();
 
         var dateToIndex = data
-            .Select((row, i) => (row[PkoCsvData.DataIndex], i))
+            .Select((row, i) => (row[PkoCsvData.DateIndex], i))
             .ToDictionary(x => x.Item1, x => x.i);
 
         return (data, dateToIndex);

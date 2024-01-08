@@ -2,6 +2,7 @@
 using MarketOps.DataPump.Providers.PkoFunds.Common;
 using MarketOps.DataPump.Providers.PkoFunds.Config;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Types;
+using MarketOps.DataPump.Providers.PkoFunds.Stages;
 using MarketOps.Types;
 
 namespace MarketOps.DataPump.Providers.PkoFunds.Processing;
@@ -40,6 +41,9 @@ internal class PkoDataProvider : IDataPumpPumpingDataProvider
 
     private static IEnumerable<PumpingData> CreatePumpingData(int fundIndex, int tsIndex, PkoFundsData data, PumpingDataRange dataRange, StockDefinitionShort stockDefinition)
     {
+        data.Data
+            .GetSingleFundDataFromLastTs(fundIndex, tsIndex);
+
         tsIndex--;
         while (tsIndex >= 0)
         {
@@ -53,7 +57,7 @@ internal class PkoDataProvider : IDataPumpPumpingDataProvider
                     priceValue,
                     priceValue,
                     "0",
-                    data.Data[tsIndex][PkoCsvData.DataIndex]);
+                    data.Data[tsIndex][PkoCsvData.DateIndex]);
 
             tsIndex--;
         }

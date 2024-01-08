@@ -8,5 +8,5 @@ internal static class PkoCsvData
     public const char FieldsSeparator = ';';
     public const string DateFormat = "yyyy-MM-dd";
 
-    public const int DataIndex = 0;
+    public const int DateIndex = 0;
 }
