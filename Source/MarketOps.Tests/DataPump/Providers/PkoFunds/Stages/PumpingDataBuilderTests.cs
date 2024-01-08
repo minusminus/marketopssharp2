@@ -14,17 +14,17 @@ internal class PumpingDataBuilderTests
     {
         var input = new List<StageData>()
         {
-            new StageData("2023-11-20", "1"),
-            new StageData("2023-11-21", "2"),
-            new StageData("2023-11-22", "3"),
+            new StageData("2023-11-20", "1,1"),
+            new StageData("2023-11-21", "2,2"),
+            new StageData("2023-11-22", "3,3"),
         };
 
         var result = PumpingDataBuilder.ToPumpingData(input, PumpingDataRange.Daily, _stockDef).ToList();
 
         result.Count.ShouldBe(input.Count);
-        CheckPumpingData(result[0], "20231120", "1");
-        CheckPumpingData(result[1], "20231121", "2");
-        CheckPumpingData(result[2], "20231122", "3");
+        CheckPumpingData(result[0], "20231120", "1.1");
+        CheckPumpingData(result[1], "20231121", "2.2");
+        CheckPumpingData(result[2], "20231122", "3.3");
     }
 
     [Test]

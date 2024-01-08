@@ -15,16 +15,22 @@ internal static class PumpingDataBuilder
             yield return BuildPumpingData(data, dataRange, stockDefinition);
     }
 
-    private static PumpingData BuildPumpingData(StageData data, PumpingDataRange dataRange, StockDefinitionShort stockDefinition) => 
-        new(
+    private static PumpingData BuildPumpingData(StageData data, PumpingDataRange dataRange, StockDefinitionShort stockDefinition)
+    {
+        var priceValue = PriceWithDot(data.Price);
+        return new(
             dataRange,
             stockDefinition,
-            data.Price,
-            data.Price,
-            data.Price,
-            data.Price,
+            priceValue,
+            priceValue,
+            priceValue,
+            priceValue,
             "0",
             NoSeparatorInTs(data.Ts));
+    }
+
+    private static string PriceWithDot(in string priceValue) =>
+        priceValue.Replace(PkoCsvData.PriceSeparator, '.');
 
     private static string NoSeparatorInTs(in string tsValue) => 
         string.Concat(tsValue.Where(c => c != PkoCsvData.DateSeparator));
