@@ -8,6 +8,7 @@ namespace MarketOps.DataPump.CliCommands;
 internal class ExecutionOptions
 {
     public bool ParsedCorrectly = false;
+    public PumpingDataProvider PumpingDataProvider;
     public StockType[] StockTypes;
     public bool SimulateStore;
 }

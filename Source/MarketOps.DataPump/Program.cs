@@ -1,7 +1,5 @@
 ﻿using MarketOps.DataPump.CliCommands;
-using MarketOps.DataPump.Common;
 using MarketOps.DataPump.SetUp;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
 
