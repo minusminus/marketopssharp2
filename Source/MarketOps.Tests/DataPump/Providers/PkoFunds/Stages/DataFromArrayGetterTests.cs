@@ -1,4 +1,5 @@
-﻿using MarketOps.DataPump.Providers.PkoFunds.Stages;
+﻿using MarketOps.DataPump.Providers.PkoFunds.Common;
+using MarketOps.DataPump.Providers.PkoFunds.Stages;
 using MarketOps.Tests.DataPump.Providers.PkoFunds.TestDataTools;
 
 namespace MarketOps.Tests.DataPump.Providers.PkoFunds.Stages;
@@ -9,7 +10,7 @@ internal class DataFromArrayGetterTests
     [Test]
     public void GetSingleFundDataFromLastTs_FromBeginning__ReturnsAllData()
     {
-        var result = DataFromArrayGetter.GetSingleFundDataFromLastTs(PkoFundsTestData.FundsData.Data, 1, -1).ToList();
+        var result = DataFromArrayGetter.GetSingleFundDataFromLastTs(PkoFundsTestData.FundsData.Data, 1, PkoCsvData.NotFoundDataIndex).ToList();
 
         result.Count.ShouldBe(PkoFundsTestData.FundsData.Data.Length);
     }

@@ -2,6 +2,7 @@
 using MarketOps.DataPump.Providers.PkoFunds.Common;
 using MarketOps.DataPump.Providers.PkoFunds.Config;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Types;
+using MarketOps.DataPump.Providers.PkoFunds.Exceptions;
 using MarketOps.DataPump.Providers.PkoFunds.Stages;
 using MarketOps.Types;
 
@@ -31,18 +32,18 @@ internal class PkoDataProvider : IDataPumpPumpingDataProvider
 
     private (int fundIndex, int tsIndex) FindDataStartingIndex(PkoFundsData data, StockDefinitionShort stockDefinition)
     {
-        var fundName = _pkoFundsDefs.StocksMapping[stockDefinition.Name];
+        var result = data.FindIndexes(_pkoFundsDefs, stockDefinition);
 
-        var fundIndex = data.FundNameToIndex[fundName];
-        var tsIndex = data.DateToIndex[stockDefinition.LastTs.ToString(PkoCsvData.DateFormat)];
-
-        return (fundIndex, tsIndex);
+        return (result.fundIndex != PkoCsvData.NotFoundDataIndex)
+            ? result
+            : throw new PkoFundsFundNotFoundException(stockDefinition.Name);
     }
 
     private static IEnumerable<PumpingData> CreatePumpingData(int fundIndex, int tsIndex, PkoFundsData data, PumpingDataRange dataRange, StockDefinitionShort stockDefinition)
     {
         data.Data
-            .GetSingleFundDataFromLastTs(fundIndex, tsIndex);
+            .GetSingleFundDataFromLastTs(fundIndex, tsIndex)
+            .FilterOutEmptyPrices();
 
         tsIndex--;
         while (tsIndex >= 0)

@@ -9,4 +9,6 @@ internal static class PkoCsvData
     public const string DateFormat = "yyyy-MM-dd";
 
     public const int DateIndex = 0;
+
+    public const int NotFoundDataIndex = -1;
 }
