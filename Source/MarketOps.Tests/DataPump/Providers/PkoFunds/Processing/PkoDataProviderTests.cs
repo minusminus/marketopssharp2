@@ -3,6 +3,7 @@ using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Processing;
 using MarketOps.DataPump.Providers.PkoFunds.Processing;
 using MarketOps.Tests.DataPump.Providers.PkoFunds.TestDataTools;
 using MarketOps.Types;
+using Microsoft.Extensions.Logging;
 
 namespace MarketOps.Tests.DataPump.Providers.PkoFunds.Processing;
 
@@ -12,6 +13,7 @@ internal class PkoDataProviderTests
     private IPkoFundsDataBuffer _dataBuffer = null!;
     private readonly PkoFundsDefs _pkoFundsDefs = PkoFundsDefsTools.Get();
     private PkoDataProvider _testObj = null!;
+    private ILogger<PkoDataProvider> _logger = null!;
 
     private readonly List<string> _testData = new()
     {
@@ -25,11 +27,12 @@ internal class PkoDataProviderTests
 
     [SetUp]
     public void SetUp()
-    {        
+    {
+        _logger = Substitute.For<ILogger<PkoDataProvider>>();
         _dataBuffer = Substitute.For<IPkoFundsDataBuffer>();
         _dataBuffer.Get().Returns(PkoDataStreamReader.Read(DataStreamTools.CreateDataStream(_testData)));
 
-        _testObj = new PkoDataProvider(_dataBuffer, _pkoFundsDefs);
+        _testObj = new PkoDataProvider(_dataBuffer, _pkoFundsDefs, _logger);
     }
 
     [Test]

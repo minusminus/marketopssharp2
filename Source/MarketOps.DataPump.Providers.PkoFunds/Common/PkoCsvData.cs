@@ -11,4 +11,7 @@ internal static class PkoCsvData
     public const int DateIndex = 0;
 
     public const int NotFoundDataIndex = -1;
+
+    public const char DateSeparator = '-';
+    public const char PriceSeparator = ',';
 }
