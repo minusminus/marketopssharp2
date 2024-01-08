@@ -30,16 +30,19 @@ internal class PkoDataProvider : IDataPumpPumpingDataProvider
         var data = _dataBuffer.Get();
         var (fundIndex, tsIndex) = FindDataStartingIndex(data, stockDefinition);
 
-        return CreatePumpingData(fundIndex, tsIndex, data, dataRange, stockDefinition);
+        return (fundIndex != PkoCsvData.NotFoundDataIndex)
+            ? CreatePumpingData(fundIndex, tsIndex, data, dataRange, stockDefinition)
+            : Enumerable.Empty<PumpingData>();
     }
 
     private (int fundIndex, int tsIndex) FindDataStartingIndex(PkoFundsData data, StockDefinitionShort stockDefinition)
     {
         var result = data.FindIndexes(_pkoFundsDefs, stockDefinition);
 
-        return (result.fundIndex != PkoCsvData.NotFoundDataIndex)
-            ? result
-            : throw new PkoFundsFundNotFoundException(stockDefinition.Name);
+        if (result.fundIndex == PkoCsvData.NotFoundDataIndex)
+            _logger.LogWarning("Missing data for id={Id} [{Name}]", stockDefinition.Id, stockDefinition.Name);
+
+        return result;
     }
 
     private IEnumerable<PumpingData> CreatePumpingData(int fundIndex, int tsIndex, PkoFundsData data, PumpingDataRange dataRange, StockDefinitionShort stockDefinition) => 

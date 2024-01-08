@@ -4,6 +4,7 @@ using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Buffering;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Downloading;
 using MarketOps.DataPump.Providers.PkoFunds.DataDownload.Processing;
 using MarketOps.DataPump.Providers.PkoFunds.Processing;
+using MarketOps.DataPump.Providers.PkoFunds.StockSelection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MarketOps.DataPump.Providers.Bossa.Construction;
@@ -23,6 +24,7 @@ public static class ServicesConfiguration
         services.AddSingleton<IPkoFundsDataBuffer, PkoFundsDataBuffer>();
 
         services.AddTransient<IDataPumpPumpingDataProvider, PkoDataProvider>();
+        services.AddTransient<IDataPumpStocksSelector, OnlyPkoFundsSelector>();
         return services;
     }
 }

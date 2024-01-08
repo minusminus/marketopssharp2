@@ -37,10 +37,13 @@ internal class PkoDataProviderTests
     }
 
     [Test]
-    public void Get_NotExistingFundName__Throws()
+    public void Get_NotExistingFundName__ReturnsEmpty_LogsWarning()
     {
         var def = new StockDefinitionShort(1, StockType.InvestmentFund, "NotExistingFund", DateTime.MinValue);
 
-        Should.Throw<PkoFundsFundNotFoundException>(() => _testObj.Get(PumpingDataRange.Daily, def).ToList());
+        var result = _testObj.Get(PumpingDataRange.Daily, def).ToList();
+
+        result.ShouldBeEmpty();
+        _logger.ReceivedWithAnyArgs(1).LogWarning(default);
     }
 }
