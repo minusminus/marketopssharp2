@@ -27,5 +27,5 @@ internal static class PumpingDataBuilder
             NoSeparatorInTs(data.Ts));
 
     private static string NoSeparatorInTs(in string tsValue) => 
-        tsValue.Where(c => c != PkoCsvData.DateSeparator).ToString()!;
+        string.Concat(tsValue.Where(c => c != PkoCsvData.DateSeparator));
 }
