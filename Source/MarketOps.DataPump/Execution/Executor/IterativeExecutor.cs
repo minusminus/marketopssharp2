@@ -10,15 +10,15 @@ namespace MarketOps.DataPump.Execution.Executor;
 /// </summary>
 internal class IterativeExecutor : IDataPumpExecutor
 {
-    private readonly IDataPumpStocksDataProvider _stocksDataProvider;
+    private readonly IDataPumpStocksSelector _stocksSelector;
     private readonly IDataPumpPumpingDataProvider _pumpingDataProvider;
     private readonly IDataPumpPumpingDataStorer _pumpingDataStorer;
     private readonly ILogger<IterativeExecutor> _logger;
 
-    public IterativeExecutor(IDataPumpStocksDataProvider stocksDataProvider, IDataPumpPumpingDataProvider pumpingDataProvider,
+    public IterativeExecutor(IDataPumpStocksSelector stocksSelector, IDataPumpPumpingDataProvider pumpingDataProvider,
         IDataPumpPumpingDataStorer pumpingDataStorer, ILogger<IterativeExecutor> logger)
     {
-        _stocksDataProvider = stocksDataProvider;
+        _stocksSelector = stocksSelector;
         _pumpingDataProvider = pumpingDataProvider;
         _pumpingDataStorer = pumpingDataStorer;
         _logger = logger;
@@ -38,7 +38,7 @@ internal class IterativeExecutor : IDataPumpExecutor
 
     private void PumpData(StockType stockType, CancellationToken stoppingToken)
     {
-        var stocksData = _stocksDataProvider.GetAllActive(stockType);
+        var stocksData = _stocksSelector.SelectStocks(stockType);
         foreach (var stockData in stocksData)
         {
             if (stoppingToken.IsCancellationRequested) break;

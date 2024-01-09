@@ -13,23 +13,38 @@ internal static class DefineCommand
     public static RootCommand Define(ExecutionOptions executionOptions)
     {
         var rootCommand = new RootCommand($"{nameof(MarketOps.DataPump)} pumping stocks data.");
+        var argPumpingDataProvider = rootCommand.CreateArgumentPumpingDataProvider();
         var argStockTypes = rootCommand.CreateArgumentStockTypes();
         var optSimulateStore = rootCommand.CreateOptionSimulateStore();
 
-        rootCommand.SetHandler((stockTypes, simulateStore) =>
+        rootCommand.SetHandler((pumpingDataProvider, stockTypes, simulateStore) =>
         {
             executionOptions.ParsedCorrectly = true;
+            executionOptions.PumpingDataProvider = pumpingDataProvider;
             executionOptions.StockTypes = stockTypes;
             executionOptions.SimulateStore = simulateStore;
-        }, argStockTypes, optSimulateStore);
+        }, argPumpingDataProvider, argStockTypes, optSimulateStore);
 
         return rootCommand;
+    }
+
+    private static Argument<PumpingDataProvider> CreateArgumentPumpingDataProvider(this Command command)
+    {
+        var argument = new Argument<PumpingDataProvider>("pumpingDataProvider",
+            //description: $"Pumping data provider type:\n[{string.Join(", ", Enum.GetNames(typeof(PumpingDataProvider)))}]")
+            description: "Pumping data provider type")
+        {
+            Arity = ArgumentArity.ExactlyOne
+        };
+
+        command.AddArgument(argument);
+        return argument;
     }
 
     private static Argument<StockType[]> CreateArgumentStockTypes(this Command command)
     {
         var argument = new Argument<StockType[]>("stockTypes",
-            description: $"List of comma separated stock types to process:\n[{string.Join(", ", Enum.GetNames(typeof(StockType)))}].\nAll active stocks of selected types are processed.",
+            description: $"List of comma separated stock types to process:\n[{string.Join(", ", Enum.GetNames(typeof(StockType)))}].\nAll active stocks of selected types will be processed.",
             parse: argumentResult => ParseStockTypesToken(argumentResult))
         {
             Arity = ArgumentArity.ExactlyOne

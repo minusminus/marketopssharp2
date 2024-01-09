@@ -8,4 +8,5 @@ namespace MarketOps.DataPump.Common;
 public interface IDataPumpStocksDataProvider
 {
     public IEnumerable<StockDefinitionShort> GetAllActive(StockType stockType);
+    public IEnumerable<StockDefinitionShort> GetAllActive(StockType stockType, string stockNamePrefix);
 }

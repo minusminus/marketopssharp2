@@ -22,7 +22,7 @@ internal static class ServicesConfiguration
             .RegisterPostgress(configuration)
             .RegisterPgStocksProvider()
             .RegisterProperStorer(executionOptions.SimulateStore)
-            .RegisterBossaProvider()
+            .RegisterSpecifiedDataProvider(executionOptions.PumpingDataProvider)
             .RegisterExecutor()
             .AddHostedService<DataPumpExecutorService>();
 
@@ -33,6 +33,17 @@ internal static class ServicesConfiguration
         else
             services.RegisterPgStorer();
 
+        return services;
+    }
+
+    private static IServiceCollection RegisterSpecifiedDataProvider(this IServiceCollection services, PumpingDataProvider pumpingDataProvider)
+    {
+        switch (pumpingDataProvider)
+        {
+            case PumpingDataProvider.Bossa: services.RegisterBossaProvider(); break;
+            case PumpingDataProvider.PkoFunds: services.RegisterPkoFundsProvider(); break;
+            default: throw new Exception($"Unkonwn pumping data provider: {pumpingDataProvider}");
+        }
         return services;
     }
 

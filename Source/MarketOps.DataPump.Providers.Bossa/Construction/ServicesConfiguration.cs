@@ -2,6 +2,7 @@
 using MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 using MarketOps.DataPump.Providers.Bossa.Processing;
+using MarketOps.DataPump.Providers.Bossa.StockSelection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MarketOps.DataPump.Providers.Bossa.Construction;
@@ -17,7 +18,9 @@ public static class ServicesConfiguration
         services.AddSingleton<IBossaDownloader, BossaDownloader>();
         services.AddSingleton<IDownloadBuffer, DiskBuffer>();
         services.AddTransient<IDataDownloader, DataDownloader>();
+
         services.AddTransient<IDataPumpPumpingDataProvider, BossaDataProvider>();
+        services.AddTransient<IDataPumpStocksSelector, AllStocksSelector>();
         return services;
     }
 }
