@@ -8,8 +8,8 @@
 internal static class VersionInfo
 {
     public const string AssemblyVersion = "2.0";
-    public const string AssemblyFileVersion = "2.0.0.0";
+    public const string AssemblyFileVersion = "2.0.0.1";
 
     public const string AssemblyProduct = "MarketOps";
-    public const string AssemblyCopyright = "Copyright © Michał Śmiechowski 2023";
+    public const string AssemblyCopyright = "Copyright © Michał Śmiechowski 2024";
 }
