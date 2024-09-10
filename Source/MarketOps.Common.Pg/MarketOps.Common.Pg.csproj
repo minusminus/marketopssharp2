@@ -1,14 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <Product>MarketOps</Product>
+    <Title>MarketOps.Common.Pg</Title>
+    <Version>2.0.1</Version>
+    <Authors>Michał Śmiechowski</Authors>
+    <Copyright>Copyright © Michał Śmiechowski 2024</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\VersionInfo\VersionInfo.cs" Link="VersionInfo.cs" />
+    <InternalsVisibleTo Include="MarketOps.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
   <ItemGroup>

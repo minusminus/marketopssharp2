@@ -1,8 +1,14 @@
-# marketopssharp2
+# MarketOpsSharp 2
 market ops tools (.net version)
 
+## Version management
+Version update using [versionize](https://github.com/versionize/versionize).
+Installed with: `dotnet tool install versionize -g`.
 
-Icons by:
+To update version number without commit and tag: `versionize -r 1.2.3 --skip-dirty --skip-commit --skip-tag`.
+
+
+## Icons by:
 - Freepik from www.flaticon.com
 - Gregor Cresnar from www.flaticon.com
 - Vectors Market from www.flaticon.com
