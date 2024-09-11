@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 
     <Product>MarketOps</Product>
-    <Title>MarketOps.DataPump.Providers.Pg</Title>
+    <Title>MarketOps</Title>
     <Version>2.0.1</Version>
     <Authors>Michał Śmiechowski</Authors>
     <Copyright>Copyright © Michał Śmiechowski 2024</Copyright>
