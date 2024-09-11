@@ -3,7 +3,7 @@
 namespace MarketOps.Scanner.Common;
 
 /// <summary>
-/// Constants used in DataPump.
+/// Constants used in Scanner.
 /// </summary>
 public static class Consts
 {

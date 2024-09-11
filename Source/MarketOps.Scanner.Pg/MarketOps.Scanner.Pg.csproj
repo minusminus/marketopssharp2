@@ -13,7 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarketOps.Types\MarketOps.Types.csproj" />
+    <InternalsVisibleTo Include="MarketOps.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarketOps.Common.Pg\MarketOps.Common.Pg.csproj" />
+    <ProjectReference Include="..\MarketOps.Scanner.Common\MarketOps.Scanner.Common.csproj" />
   </ItemGroup>
 
 </Project>

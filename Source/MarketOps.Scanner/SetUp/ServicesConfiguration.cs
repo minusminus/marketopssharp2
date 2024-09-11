@@ -1,5 +1,6 @@
 ﻿using MarketOps.Common.Pg.Construction;
 using MarketOps.Scanner.CliCommands;
+using MarketOps.Scanner.Pg.Construction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,8 +12,8 @@ internal static class ServicesConfiguration
         ExecutionOptions executionOptions) =>
         services
             .AddSingleton(executionOptions)
-            .RegisterPostgress(configuration);
-            //.RegisterPgStocksProvider()
+            .RegisterPostgress(configuration)
+            .RegisterPgStocksProvider();
             //.RegisterSpecifiedDataProvider(executionOptions.PumpingDataProvider)
             //.RegisterExecutor()
             //.AddHostedService<DataPumpExecutorService>();

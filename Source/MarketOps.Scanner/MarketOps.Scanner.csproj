@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MarketOps.Common.Pg\MarketOps.Common.Pg.csproj" />
     <ProjectReference Include="..\MarketOps.Scanner.Common\MarketOps.Scanner.Common.csproj" />
+    <ProjectReference Include="..\MarketOps.Scanner.Pg\MarketOps.Scanner.Pg.csproj" />
     <ProjectReference Include="..\MarketOps.Types\MarketOps.Types.csproj" />
   </ItemGroup>
 
