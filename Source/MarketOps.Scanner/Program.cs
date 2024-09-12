@@ -1,4 +1,5 @@
-﻿using MarketOps.Scanner.CliCommands;
+﻿using MarketOps.Scanner.Abstractions;
+using MarketOps.Scanner.CliCommands;
 using MarketOps.Scanner.SetUp;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
@@ -9,17 +10,17 @@ internal class Program
 {
     public static async Task Main(string[] args)
     {
-        ExecutionOptions executionOptions = new();
+        ScanningOptions scanningOptions = new();
 
-        await DefineCommand.Define(executionOptions)
+        await DefineCommand.Define(scanningOptions)
             .InvokeAsync(args);
 
-        if (!executionOptions.ParsedCorrectly) return;
+        if (!scanningOptions.ParsedCorrectly) return;
 
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration(configurationBuilder => configurationBuilder.ConfigureAppConfig())
             .ConfigureLogging(loggingBuilder => loggingBuilder.ConfigureLogging())
-            .ConfigureServices((context, services) => services.RegisterServices(context.Configuration, executionOptions))
+            .ConfigureServices((context, services) => services.RegisterServices(context.Configuration, scanningOptions))
             .Build();
 
         await host.RunAsync();

@@ -1,12 +1,13 @@
-﻿namespace MarketOps.Scanner.CliCommands;
+﻿namespace MarketOps.Scanner.Abstractions;
 
 /// <summary>
-/// Execution options from commandline.
+/// Scanning options from commandline.
 /// </summary>
-internal class ExecutionOptions
+internal record ScanningOptions
 {
     public bool ParsedCorrectly = false;
     public string ScannerName;
     public string StockNamesFilePath;
+    public string ResultsPath;
     public int NumberOfSignalsPerStock;
 }

@@ -15,7 +15,7 @@ internal class PgStocksDataProvider : PgOperationBase, IScannerStockDataProvider
     public PgStocksDataProvider(IPgConnectionFactory pgConnectionFactory) : base(pgConnectionFactory)
     { }
 
-    public async Task<StockDefinitionShort?> GetStockDefinition(string stockName)
+    public async Task<StockDefinitionShort?> GetStockDefinitionAsync(string stockName)
     {
         var query = $@"
 select s.{Stocks.Id} as ""Id"", s.{Stocks.StockType} as ""Type"", s.{Stocks.StockName} as ""Name"", s.{Stocks.StartTs} as ""LastTs""
@@ -29,7 +29,7 @@ where s.{Stocks.StockName} = @StockName";
         return await connection.QuerySingleOrDefaultAsync<StockDefinitionShort>(query, parameters);
     }
 
-    public async Task<StockData> GetStockData(StockDefinitionShort stockDefinition)
+    public async Task<StockData> GetStockDataAsync(StockDefinitionShort stockDefinition)
     {
         var query = $@"
 select *

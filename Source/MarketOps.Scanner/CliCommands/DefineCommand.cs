@@ -1,28 +1,30 @@
-﻿using System.CommandLine.Parsing;
-using System.CommandLine;
+﻿using System.CommandLine;
+using MarketOps.Scanner.Abstractions;
 
 namespace MarketOps.Scanner.CliCommands;
 
 /// <summary>
 /// Command line command definition.
-/// Properly parsed arguments are rewritten to ExecutionOptions to be used in processing.
+/// Properly parsed arguments are rewritten to ScanningOptions to be used in processing.
 /// </summary>
 internal static class DefineCommand
 {
-    public static RootCommand Define(ExecutionOptions executionOptions)
+    public static RootCommand Define(ScanningOptions scanningOptions)
     {
         var rootCommand = new RootCommand($"{nameof(MarketOps.Scanner)} scanning stocks data in search for signals.");
         var argScannerName = rootCommand.CreateArgumentScannerName();
         var argStockNamesFilePath = rootCommand.CreateArgumentStockNamesFilePath();
+        var argResultsPath = rootCommand.CreateArgumentResultsPath();
         var optNumberOfSignalsPerStock = rootCommand.CreateOptionNumberOfSignalsPerStock();
 
-        rootCommand.SetHandler((scannerName, stockNamesFilePath, numberOfSignalsPerStock) =>
+        rootCommand.SetHandler((scannerName, stockNamesFilePath, resultsPath, numberOfSignalsPerStock) =>
         {
-            executionOptions.ParsedCorrectly = true;
-            executionOptions.ScannerName = scannerName;
-            executionOptions.StockNamesFilePath = stockNamesFilePath;
-            executionOptions.NumberOfSignalsPerStock = numberOfSignalsPerStock;
-        }, argScannerName, argStockNamesFilePath, optNumberOfSignalsPerStock);
+            scanningOptions.ParsedCorrectly = true;
+            scanningOptions.ScannerName = scannerName;
+            scanningOptions.StockNamesFilePath = stockNamesFilePath;
+            scanningOptions.ResultsPath = resultsPath;
+            scanningOptions.NumberOfSignalsPerStock = numberOfSignalsPerStock;
+        }, argScannerName, argStockNamesFilePath, argResultsPath, optNumberOfSignalsPerStock);
 
         return rootCommand;
     }
@@ -51,18 +53,29 @@ internal static class DefineCommand
         return argument;
     }
 
+    private static Argument<string> CreateArgumentResultsPath(this Command command)
+    {
+        var argument = new Argument<string>("resultsPath",
+            description: "Path for scanning results.",
+            getDefaultValue: () => string.Empty)
+        {
+            Arity = ArgumentArity.ExactlyOne
+        };
+
+        command.AddArgument(argument);
+        return argument;
+    }
+
     private static Option<int> CreateOptionNumberOfSignalsPerStock(this Command command)
     {
         var option = new Option<int>("--numberOfSignalsPerStock",
             description: "Number of signals generated for each stock",
-            getDefaultValue: DefaultNumberOfSignalsPerStock)
+            getDefaultValue: () => 1)
         {
             Arity = ArgumentArity.ExactlyOne
         };
 
         command.AddOption(option);
         return option;
-
-        int DefaultNumberOfSignalsPerStock() => 1;
     }
 }

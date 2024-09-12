@@ -11,7 +11,7 @@ internal static class LoggingConfiguration
         var loggerConfiguration = new LoggerConfiguration()
             .WriteTo.Console()
             .WriteTo.File(
-                path: Path.Combine(Consts.ExecutingLocation, "DataPumpLogs.log"),
+                path: Path.Combine(Consts.ExecutingLocation, "ScannerLogs.log"),
                 restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning);
 
         loggingBuilder

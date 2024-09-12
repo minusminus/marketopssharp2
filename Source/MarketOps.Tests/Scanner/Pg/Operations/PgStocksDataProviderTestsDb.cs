@@ -29,7 +29,7 @@ internal class PgStocksDataProviderTestsDb
     [Test]
     public async Task GetStockDefinition_ExistingStock__GetsFromPg()
     {
-        var result = await _testObj.GetStockDefinition("Stock1");
+        var result = await _testObj.GetStockDefinitionAsync("Stock1");
 
         result.ShouldNotBeNull();
         Console.WriteLine(result);
@@ -38,7 +38,7 @@ internal class PgStocksDataProviderTestsDb
     [Test]
     public async Task GetStockDefinition_NotExistingStock__ReturnsNull()
     {
-        var result = await _testObj.GetStockDefinition("Some not existing stock");
+        var result = await _testObj.GetStockDefinitionAsync("Some not existing stock");
 
         result.ShouldBeNull();
     }
@@ -48,7 +48,7 @@ internal class PgStocksDataProviderTestsDb
     {
         var stock = new StockDefinitionShort(1, StockType.Stock, string.Empty, DateTime.Now);
 
-        var result = await _testObj.GetStockData(stock);
+        var result = await _testObj.GetStockDataAsync(stock);
 
         result.ShouldNotBeNull();
         result.Count.ShouldBeGreaterThan(0);

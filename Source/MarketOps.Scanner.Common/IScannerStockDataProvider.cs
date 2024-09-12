@@ -9,6 +9,6 @@ namespace MarketOps.Scanner.Common;
 /// </summary>
 public interface IScannerStockDataProvider
 {
-    public Task<StockDefinitionShort?> GetStockDefinition(string stockName);
-    public Task<StockData> GetStockData(StockDefinitionShort stockDefinition);
+    public Task<StockDefinitionShort?> GetStockDefinitionAsync(string stockName);
+    public Task<StockData> GetStockDataAsync(StockDefinitionShort stockDefinition);
 }

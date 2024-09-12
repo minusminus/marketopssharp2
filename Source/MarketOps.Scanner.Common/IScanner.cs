@@ -2,8 +2,10 @@
 
 /// <summary>
 /// Interface for scanning mechanism.
+/// 
+/// Signals returned in order of data.
 /// </summary>
 public interface IScanner
 {
-    public ScanResult[] Scan(StockData data, int numberOfSignals);
+    public void Scan(StockData data, ScanResult[] result);
 }
