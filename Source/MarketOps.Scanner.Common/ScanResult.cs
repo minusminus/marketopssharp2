@@ -14,13 +14,13 @@ public readonly struct ScanResult
     public static ScanResult[] Initialize(int count) => 
         Enumerable
         .Range(0, count)
-        .Select(_ => new ScanResult(ScanResultSignal.Signal, null))
+        .Select(_ => new ScanResult(ScanResultSignal.Uspecified, null))
         .ToArray();
 
-    public static ScanResult Signaled(Dictionary<string, object>? additionalData) =>
+    public static ScanResult Signaled(Dictionary<string, object>? additionalData = null) =>
         new(ScanResultSignal.Signal, additionalData);
 
-    public static ScanResult NotSignaled(Dictionary<string, object>? additionalData) =>
+    public static ScanResult NotSignaled(Dictionary<string, object>? additionalData = null) =>
         new(ScanResultSignal.NoSignal, additionalData);
 }
 

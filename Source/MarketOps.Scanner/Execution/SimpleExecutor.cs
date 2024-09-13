@@ -1,5 +1,6 @@
 ﻿using MarketOps.Scanner.Abstractions;
 using MarketOps.Scanner.Common;
+using Microsoft.Extensions.Logging;
 
 namespace MarketOps.Scanner.Execution;
 
@@ -13,26 +14,39 @@ internal class SimpleExecutor : IScanningExecutor
     private readonly IScannerStockDataProvider _stockDataProvider;
     private readonly IScanResultProcessor _resultProcessor;
     private readonly IScannersFactory _scannerFactory;
+    private readonly ILogger<SimpleExecutor> _logger;
 
     public SimpleExecutor(ScanningOptions scanningOptions, IStockNamesLoader stockNamesLoader, IScannerStockDataProvider stockDataProvider,
-        IScanResultProcessor resultProcessor, IScannersFactory scannerFactory)
+        IScanResultProcessor resultProcessor, IScannersFactory scannerFactory, ILogger<SimpleExecutor> logger)
     {
         _scanningOptions = scanningOptions;
         _stockNamesLoader = stockNamesLoader;
         _stockDataProvider = stockDataProvider;
         _resultProcessor = resultProcessor;
         _scannerFactory = scannerFactory;
+        _logger = logger;
     }
 
     public async Task Execute(CancellationToken token)
     {
+        LogScanningOptions();
+
         IScanner scanner = GetScanner();
         string[] stockNames = GetStockNames();
         for (int i = 0; i < stockNames.Length; i++)
         {
             if (token.IsCancellationRequested) return;
+            _logger.LogInformation("{StockName}", stockNames[i]);
             await ProcessStock(stockNames[i], _scanningOptions.NumberOfSignalsPerStock, scanner);
         }
+    }
+
+    private void LogScanningOptions()
+    {
+        string header = "Scanner options";
+        _logger.LogInformation("[{Header}] Selected scanner: {ScannerName}", header, _scanningOptions.ScannerName);
+        _logger.LogInformation("[{Header}] Number of signals per stock: {NumberOfSignalsPerStock}", header, _scanningOptions.NumberOfSignalsPerStock);
+        _logger.LogInformation("[{Header}] Results path: {ResultsPath}", header, _scanningOptions.ResultsPath);
     }
 
     private IScanner GetScanner() =>

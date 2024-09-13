@@ -7,5 +7,5 @@
 /// </summary>
 public interface IScanner
 {
-    public void Scan(StockData data, ScanResult[] result);
+    public void Scan(StockData data, in ScanResult[] result);
 }

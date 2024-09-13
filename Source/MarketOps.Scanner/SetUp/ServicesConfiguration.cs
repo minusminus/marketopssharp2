@@ -4,6 +4,7 @@ using MarketOps.Scanner.Execution;
 using MarketOps.Scanner.Pg.Construction;
 using MarketOps.Scanner.ResultProcessing;
 using MarketOps.Scanner.ScannersLoading;
+using MarketOps.Scanner.Services;
 using MarketOps.Scanner.StockNamesLoading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,6 @@ internal static class ServicesConfiguration
             .AddTransient<IStockNamesLoader, StockNamesLoader>()
             .AddTransient<IScannersFactory, ScannersFactory>()
             .AddTransient<IScanResultProcessor, SingleFileResultProcessor>()
-            .AddTransient<IScanningExecutor, SimpleExecutor>();
-
-            //.AddHostedService<DataPumpExecutorService>();
+            .AddTransient<IScanningExecutor, SimpleExecutor>()
+            .AddHostedService<ScannerExecutorService>();
 }

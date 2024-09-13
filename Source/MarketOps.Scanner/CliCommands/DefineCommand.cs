@@ -44,7 +44,7 @@ internal static class DefineCommand
     private static Argument<string> CreateArgumentStockNamesFilePath(this Command command)
     {
         var argument = new Argument<string>("stockNamesFilePath",
-            description: "Path to file with stock names to scan.")
+            description: "Path to file containing stock names to scan.")
         {
             Arity = ArgumentArity.ExactlyOne
         };

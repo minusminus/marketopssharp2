@@ -22,7 +22,7 @@ internal class StockNamesLoader : IStockNamesLoader
         while (!reader.EndOfStream)
         {
             var line = reader.ReadLine();
-            var splitedNames = line!.Split(SplitChars);
+            var splitedNames = line!.Split(SplitChars, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             foreach (var name in splitedNames)
                 yield return name;
         }
