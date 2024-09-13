@@ -11,7 +11,7 @@ namespace MarketOps.Scanner.ScannersLoading;
 /// </summary>
 internal class ScannersFactory : IScannersFactory
 {
-    private const string AssemblyNamePrefix = "MarketOps.Scanner.";
+    private const string AssemblyNamePrefix = "MarketOps.Scanner";
 
     public IScanner? GetScanner(string scannerName)
     {

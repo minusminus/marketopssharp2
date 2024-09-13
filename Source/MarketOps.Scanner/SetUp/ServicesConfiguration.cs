@@ -20,10 +20,8 @@ internal static class ServicesConfiguration
             .RegisterPgStocksProvider()
             .AddTransient<IStockNamesLoader, StockNamesLoader>()
             .AddTransient<IScannersFactory, ScannersFactory>()
-            .AddTransient<IScanResultProcessor, StocksInSeparateFilesResultProcessor>()
+            .AddTransient<IScanResultProcessor, SingleFileResultProcessor>()
             .AddTransient<IScanningExecutor, SimpleExecutor>();
 
-            //.RegisterSpecifiedDataProvider(executionOptions.PumpingDataProvider)
-            //.RegisterExecutor()
             //.AddHostedService<DataPumpExecutorService>();
 }

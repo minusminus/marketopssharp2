@@ -20,7 +20,7 @@ internal class StockNamesLoaderTests
     public void TearDown()
     {
         if (File.Exists(_filePath))
-            Directory.Delete(Path.GetDirectoryName(_filePath), true);
+            Directory.Delete(Path.GetDirectoryName(_filePath)!, true);
     }
 
     [Test]

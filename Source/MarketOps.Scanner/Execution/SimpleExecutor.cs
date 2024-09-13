@@ -26,14 +26,21 @@ internal class SimpleExecutor : IScanningExecutor
 
     public async Task Execute(CancellationToken token)
     {
-        var scanner = _scannerFactory.GetScanner(_scanningOptions.ScannerName);
-        var stockNames = _stockNamesLoader.GetStockNames(_scanningOptions.StockNamesFilePath);
+        IScanner scanner = GetScanner();
+        string[] stockNames = GetStockNames();
         for (int i = 0; i < stockNames.Length; i++)
         {
             if (token.IsCancellationRequested) return;
             await ProcessStock(stockNames[i], _scanningOptions.NumberOfSignalsPerStock, scanner);
         }
     }
+
+    private IScanner GetScanner() =>
+        _scannerFactory.GetScanner(_scanningOptions.ScannerName)
+            ?? throw new Exception($"Scanner {_scanningOptions.ScannerName} not found.");
+
+    private string[] GetStockNames() => 
+        _stockNamesLoader.GetStockNames(_scanningOptions.StockNamesFilePath);
 
     private async Task ProcessStock(string stockName, int numberOfSignals, IScanner scanner)
     {
