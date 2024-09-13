@@ -39,6 +39,7 @@
     <ProjectReference Include="..\MarketOps.DataPump.Providers.PkoFunds\MarketOps.DataPump.Providers.PkoFunds.csproj" />
     <ProjectReference Include="..\MarketOps.DataPump.Storers.Pg\MarketOps.DataPump.Storers.Pg.csproj" />
     <ProjectReference Include="..\MarketOps.Scanner.Pg\MarketOps.Scanner.Pg.csproj" />
+    <ProjectReference Include="..\MarketOps.Scanner.Scanners\MarketOps.Scanner.Scanners.csproj" />
     <ProjectReference Include="..\MarketOps.Scanner\MarketOps.Scanner.csproj" />
   </ItemGroup>
 

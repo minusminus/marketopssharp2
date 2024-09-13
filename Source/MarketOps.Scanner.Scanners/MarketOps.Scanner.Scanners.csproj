@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <Product>MarketOps</Product>
+    <Title>MarketOps</Title>
+    <Version>2.0.1</Version>
+    <Authors>Michał Śmiechowski</Authors>
+    <Copyright>Copyright © Michał Śmiechowski 2024</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="MarketOps.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarketOps.Scanner.Common\MarketOps.Scanner.Common.csproj" />
+  </ItemGroup>
+
+</Project>
