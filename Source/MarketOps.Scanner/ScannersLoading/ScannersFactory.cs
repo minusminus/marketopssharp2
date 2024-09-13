@@ -27,7 +27,6 @@ internal class ScannersFactory : IScannersFactory
 
     private static Assembly[] PreloadAssemblies()
     {
-        //var classLibraries = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, AssemblyNamePrefix + "*.dll");
         var classLibraries = Directory.GetFiles(Consts.ExecutingLocation, AssemblyNamePrefix + "*.dll");
         
         return classLibraries

@@ -2,6 +2,7 @@
 using MarketOps.Scanner.Common;
 using MarketOps.Scanner.Execution;
 using MarketOps.Types;
+using Microsoft.Extensions.Logging;
 
 namespace MarketOps.Tests.Scanner.Execution;
 
@@ -15,6 +16,7 @@ internal class SimpleExecutorTests
     private IScanResultProcessor _resultProcessor;
     private IScannersFactory _scannerFactory;
     private IScanner _scanner;
+    private ILogger<SimpleExecutor> _logger;
 
     private SimpleExecutor _testObj;
 
@@ -26,8 +28,9 @@ internal class SimpleExecutorTests
         _resultProcessor = Substitute.For<IScanResultProcessor>();
         _scannerFactory = Substitute.For<IScannersFactory>();
         _scanner = Substitute.For<IScanner>();
+        _logger = Substitute.For<ILogger<SimpleExecutor>>();
 
-        _testObj = new SimpleExecutor(new ScanningOptions(), _stockNamesLoader, _stockDataProvider, _resultProcessor, _scannerFactory);
+        _testObj = new SimpleExecutor(new ScanningOptions(), _stockNamesLoader, _stockDataProvider, _resultProcessor, _scannerFactory, _logger);
     }
 
     [Test]
@@ -45,6 +48,7 @@ internal class SimpleExecutorTests
 
         //then
         _scannerFactory.Received(1).GetScanner(Arg.Any<string>());
+        _scanner.Received(1).SetParameters(Arg.Any<string>());
         _stockNamesLoader.Received(1).GetStockNames(Arg.Any<string>());
         await _stockDataProvider.Received(stockNames.Length).GetStockDefinitionAsync(Arg.Any<string>());
         await _stockDataProvider.Received(stockNames.Length).GetStockDataAsync(Arg.Any<StockDefinitionShort>());
@@ -67,6 +71,7 @@ internal class SimpleExecutorTests
 
         //then
         _scannerFactory.Received(1).GetScanner(Arg.Any<string>());
+        _scanner.Received(1).SetParameters(Arg.Any<string>());
         _stockNamesLoader.Received(1).GetStockNames(Arg.Any<string>());
         await _stockDataProvider.DidNotReceive().GetStockDefinitionAsync(Arg.Any<string>());
         await _stockDataProvider.DidNotReceive().GetStockDataAsync(Arg.Any<StockDefinitionShort>());
@@ -86,6 +91,7 @@ internal class SimpleExecutorTests
 
         //then
         _scannerFactory.Received(1).GetScanner(Arg.Any<string>());
+        _scanner.DidNotReceive().SetParameters(Arg.Any<string>());
         _stockNamesLoader.DidNotReceive().GetStockNames(Arg.Any<string>());
         await _stockDataProvider.DidNotReceive().GetStockDefinitionAsync(Arg.Any<string>());
         await _stockDataProvider.DidNotReceive().GetStockDataAsync(Arg.Any<StockDefinitionShort>());

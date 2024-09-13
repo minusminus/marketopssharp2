@@ -1,0 +1,1 @@
+dotnet publish MarketOps.Scanner\MarketOps.Scanner.csproj -o "f:\code\MarketOpsSharp2\working version\Scanner" 

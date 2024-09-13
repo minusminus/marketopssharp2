@@ -10,4 +10,5 @@ internal record ScanningOptions
     public string StockNamesFilePath;
     public string ResultsPath;
     public int NumberOfSignalsPerStock;
+    public string ScannerParametersJson;
 }
