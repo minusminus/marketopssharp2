@@ -3,6 +3,7 @@
 /// <summary>
 /// Scanning options from commandline.
 /// </summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 internal record ScanningOptions
 {
     public bool ParsedCorrectly = false;
@@ -12,3 +13,4 @@ internal record ScanningOptions
     public int NumberOfSignalsPerStock;
     public string ScannerParametersJson;
 }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.

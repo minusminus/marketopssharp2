@@ -5,9 +5,9 @@ using System.Text.Json;
 namespace MarketOps.Scanner.Scanners.HLChannelBoundaryHit;
 
 /// <summary>
-/// Scans for lower boundary hit in price HL channel.
+/// Scans for low bound hit in price HL channel.
 /// </summary>
-public class HLChannelBoundaryHitScanner : IScanner
+public class HLChannelLowBoundaryHitScanner : IScanner
 {
     private HLChannelBoundaryHitScannerParams _scannerParams = HLChannelBoundaryHitScannerParams.Default();
 
