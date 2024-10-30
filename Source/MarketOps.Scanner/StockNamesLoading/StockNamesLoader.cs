@@ -14,7 +14,9 @@ internal class StockNamesLoader : IStockNamesLoader
     public string[] GetStockNames(string filePath)
     {
         using var reader = File.OpenText(filePath);
-        return ReadAllNames(reader).ToArray();
+        return ReadAllNames(reader)
+            .OrderBy(x => x)
+            .ToArray();
     }
 
     private IEnumerable<string> ReadAllNames(StreamReader reader)
