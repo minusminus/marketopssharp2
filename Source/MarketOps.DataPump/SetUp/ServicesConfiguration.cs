@@ -40,7 +40,9 @@ internal static class ServicesConfiguration
     {
         switch (pumpingDataProvider)
         {
-            case PumpingDataProvider.Bossa: services.RegisterBossaProvider(); break;
+            //case PumpingDataProvider.Bossa: services.RegisterBossaProvider(); break;
+            case PumpingDataProvider.Bossa: throw new Exception($"{PumpingDataProvider.Bossa} provider is turned off");
+            case PumpingDataProvider.BossaFromfile: services.RegisterBossaFromFileProvider(); break;
             case PumpingDataProvider.PkoFunds: services.RegisterPkoFundsProvider(); break;
             default: throw new Exception($"Unkonwn pumping data provider: {pumpingDataProvider}");
         }

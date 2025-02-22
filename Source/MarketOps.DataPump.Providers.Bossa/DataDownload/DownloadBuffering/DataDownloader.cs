@@ -1,4 +1,5 @@
 ﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.Abstractions;
 using MarketOps.DataPump.Providers.Bossa.Processing;
 using MarketOps.Types;
 using Microsoft.Extensions.Logging;
@@ -41,6 +42,6 @@ internal class DataDownloader : IDataDownloader
             yield return streamReader.ReadLine() ?? string.Empty;
     }
 
-    private BufferEntry GetEntryFromBuffer(StockDefinitionShort stockDefinition) => 
+    private BufferEntry GetEntryFromBuffer(StockDefinitionShort stockDefinition) =>
         _downloadBuffer.GetFile(PumpingDataRange.Daily, stockDefinition);
 }

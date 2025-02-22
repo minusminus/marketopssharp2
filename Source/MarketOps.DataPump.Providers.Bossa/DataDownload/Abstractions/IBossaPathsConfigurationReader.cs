@@ -1,6 +1,6 @@
 ﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
 
-namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
+namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Abstractions;
 
 /// <summary>
 /// Interface to read bossa configuration paths.

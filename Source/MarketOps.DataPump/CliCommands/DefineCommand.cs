@@ -31,8 +31,7 @@ internal static class DefineCommand
     private static Argument<PumpingDataProvider> CreateArgumentPumpingDataProvider(this Command command)
     {
         var argument = new Argument<PumpingDataProvider>("pumpingDataProvider",
-            //description: $"Pumping data provider type:\n[{string.Join(", ", Enum.GetNames(typeof(PumpingDataProvider)))}]")
-            description: "Pumping data provider type")
+            description: $"Pumping data provider type\n{PumpingDataProvider.Bossa} provider is turned off (Bossa public data is unavailable since 2025)")
         {
             Arity = ArgumentArity.ExactlyOne
         };

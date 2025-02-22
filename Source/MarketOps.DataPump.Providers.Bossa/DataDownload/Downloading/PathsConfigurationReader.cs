@@ -1,4 +1,5 @@
 ﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.Abstractions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
 using System.Text.Json;
