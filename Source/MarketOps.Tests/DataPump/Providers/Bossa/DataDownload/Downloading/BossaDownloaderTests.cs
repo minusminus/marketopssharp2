@@ -1,4 +1,5 @@
-﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
+﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Abstractions;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Exceptions;
 using MarketOps.DataPump.Providers.Bossa.DataDownload.Types;
 using MarketOps.Tests.Mocks.HttpClientHelpers;

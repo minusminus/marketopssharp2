@@ -1,4 +1,5 @@
-﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
+﻿using MarketOps.DataPump.Providers.Bossa.DataDownload.Abstractions;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 using MarketOps.Tests.Mocks.Types;
 using MarketOps.Types;
 using Microsoft.Extensions.Logging;

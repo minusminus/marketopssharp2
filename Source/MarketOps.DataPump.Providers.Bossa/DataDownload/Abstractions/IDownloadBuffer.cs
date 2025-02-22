@@ -1,7 +1,8 @@
 ﻿using MarketOps.DataPump.Common;
+using MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
 using MarketOps.Types;
 
-namespace MarketOps.DataPump.Providers.Bossa.DataDownload.DownloadBuffering;
+namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Abstractions;
 
 /// <summary>
 /// Bossa download buffering interface.

@@ -7,46 +7,49 @@ using MarketOps.Types;
 namespace MarketOps.DataPump.Providers.Bossa.DataDownload.Downloading;
 
 /// <summary>
-/// Downloads zipped data from bossa.
+/// Provides previously downloaded zipped data from bossa.
+/// Files downloaded to specified folder by hand.
 /// </summary>
-internal class BossaDownloader : IBossaDownloader
+internal class BossaFromFile : IBossaDownloader
 {
-    private readonly IHttpClientFactory _factory;
     private readonly IBossaPathsConfigurationReader _configReader;
     private BossaPaths? _bossaPaths;
 
-    public BossaDownloader(IHttpClientFactory factory, IBossaPathsConfigurationReader configReader)
+    internal readonly string PredownloadedPath = Path.Combine(Consts.ExecutingLocation, "BossaFiles");
+
+    public BossaFromFile(IBossaPathsConfigurationReader configReader)
     {
-        _factory = factory;
         _configReader = configReader;
+        if (!Directory.Exists(PredownloadedPath))
+            Directory.CreateDirectory(PredownloadedPath);
     }
 
     public void Get(PumpingDataRange dataRange, StockType stockType, string stockName, Action<Stream> streamProcessor)
     {
-        string downloadUri = dataRange switch
+        string dataFilePath = dataRange switch
         {
-            PumpingDataRange.Daily => GetDailyFileUri(stockType),
+            PumpingDataRange.Daily => GetDailyFilePath(stockType),
             _ => throw new ArgumentException($"Not supported data range {dataRange}"),
         };
-        DownloadAndProcessStream(downloadUri, streamProcessor);
+        ProcessDataFile(dataFilePath, streamProcessor);
     }
 
-    private string GetDailyFileUri(StockType stockType)
+    private string GetDailyFilePath(StockType stockType)
     {
         var definition = GetSingletonConfig().Daily?.Find(x => x.StockType == stockType);
         if (definition is null)
             throw new BossaDownloadException(stockType);
-        return BuildDailyUri(definition);
+        return BuildDailyFilePath(definition);
     }
 
-    private void DownloadAndProcessStream(string uri, Action<Stream> streamProcessor)
+    private string BuildDailyFilePath(DailyPathDescription definition) =>
+        Path.Combine(PredownloadedPath, definition.FileName);
+
+    private void ProcessDataFile(string filePath, Action<Stream> streamProcessor)
     {
-        using var client = _factory.CreateClient();
-        using var stream = client.GetStreamAsync(uri).Result;
+        using var stream = File.OpenRead(filePath);
         streamProcessor(stream);
     }
-    private static string BuildDailyUri(DailyPathDescription definition) => 
-        new Uri(new Uri(definition.Path), definition.FileName).ToString();
 
     private BossaPaths GetSingletonConfig()
     {
