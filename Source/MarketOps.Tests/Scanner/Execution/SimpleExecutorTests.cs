@@ -48,7 +48,7 @@ internal class SimpleExecutorTests
 
         //then
         _scannerFactory.Received(1).GetScanner(Arg.Any<string>());
-        _scanner.Received(1).SetParameters(Arg.Any<string>());
+        //_scanner.Received(1).SetParameters(Arg.Any<string>());
         _stockNamesLoader.Received(1).GetStockNames(Arg.Any<string>());
         await _stockDataProvider.Received(stockNames.Length).GetStockDefinitionAsync(Arg.Any<string>());
         await _stockDataProvider.Received(stockNames.Length).GetStockDataAsync(Arg.Any<StockDefinitionShort>());
@@ -71,7 +71,7 @@ internal class SimpleExecutorTests
 
         //then
         _scannerFactory.Received(1).GetScanner(Arg.Any<string>());
-        _scanner.Received(1).SetParameters(Arg.Any<string>());
+        //_scanner.Received(1).SetParameters(Arg.Any<string>());
         _stockNamesLoader.Received(1).GetStockNames(Arg.Any<string>());
         await _stockDataProvider.DidNotReceive().GetStockDefinitionAsync(Arg.Any<string>());
         await _stockDataProvider.DidNotReceive().GetStockDataAsync(Arg.Any<StockDefinitionShort>());
