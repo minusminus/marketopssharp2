@@ -331,3 +331,4 @@ ASALocalRun/
 
 # dodatkowe
 appconfig.json
+appsettings*.json

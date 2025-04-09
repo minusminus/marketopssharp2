@@ -4,7 +4,6 @@ namespace MarketOps.Viewer.Backend.DataReading.Handlers;
 
 internal static class DatabaseHelper
 {
-    // Zwraca pełną nazwę tabeli (ze schematem) lub null, jeśli kombinacja jest nieobsługiwana
     public static string? GetOhlcvTableName(StockType stockType, Timeframe timeframe)
     {
         string prefix;
@@ -16,7 +15,6 @@ internal static class DatabaseHelper
             default: return null; // Nieobsługiwany timeframe
         }
 
-        // Mapowanie StockType na sufiks liczbowy
         string? suffix;
         switch (stockType)
         {
@@ -27,7 +25,6 @@ internal static class DatabaseHelper
             default: return null; // Nieobsługiwany StockType
         }
 
-        // Zwróć pełną nazwę tabeli (zakładając schemat 'public')
         return $"public.{prefix}{suffix}";
     }
 }

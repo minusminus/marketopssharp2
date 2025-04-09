@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.Viewer.Backend", "MarketOps.Viewer\MarketOps.Viewer.Backend\MarketOps.Viewer.Backend.csproj", "{CB82E317-3751-41EA-A46B-14108BE6BB54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketOps.Viewer.Tests", "MarketOps.Viewer\MarketOps.Viewer.Tests\MarketOps.Viewer.Tests.csproj", "{4713152F-814F-4ABF-B772-D25C0791D988}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CB82E317-3751-41EA-A46B-14108BE6BB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB82E317-3751-41EA-A46B-14108BE6BB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB82E317-3751-41EA-A46B-14108BE6BB54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4713152F-814F-4ABF-B772-D25C0791D988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4713152F-814F-4ABF-B772-D25C0791D988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4713152F-814F-4ABF-B772-D25C0791D988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4713152F-814F-4ABF-B772-D25C0791D988}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
