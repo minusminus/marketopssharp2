@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wykresy Giełdowe</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link do naszego pliku CSS -->
+</head>
+<body>
+
+    <h1>Wykresy Giełdowe</h1>
+
+    <!-- Kontener na kontrolki -->
+    <div id="controls">
+        <label for="stockSelect">Instrument:</label>
+        <select id="stockSelect">
+            <option value="">Ładowanie...</option>
+        </select>
+
+        <label for="startDate">Data od:</label>
+        <input type="date" id="startDate">
+
+        <label for="endDate">Data do:</label>
+        <input type="date" id="endDate">
+
+        <label for="timeframeSelect">Interwał:</label>
+        <select id="timeframeSelect">
+            <option value="daily" selected>Dzienny</option>
+            <option value="weekly">Tygodniowy</option>
+            <option value="monthly">Miesięczny</option>
+        </select>
+
+        <button id="showChartButton">Pokaż Wykres</button>
+    </div>
+
+    <!-- Na razie miejsce na JEDEN wykres -->
+    <div id="chartContainer" class="chart-container">
+        <!-- Tutaj Plotly umieści wykres -->
+        <div id="chartOptions" style="display: none;"> <!-- Opcje dla wykresu, ukryte na początku -->
+             <label>Typ wykresu:</label>
+             <input type="radio" id="chartTypeCandle" name="chartType" value="candle" checked> <label for="chartTypeCandle">Świecowy</label>
+             <input type="radio" id="chartTypeLine" name="chartType" value="line"> <label for="chartTypeLine">Liniowy</label>
+             <br>
+             <label>Wskaźniki:</label>
+             <input type="checkbox" id="indicatorSMA"> <label for="indicatorSMA">SMA(20)</label>
+             <input type="checkbox" id="indicatorChannel"> <label for="indicatorChannel">Kanał Ceny(20)</label>
+             <input type="checkbox" id="indicatorBB"> <label for="indicatorBB">Bollinger(20, 2)</label>
+             <input type="checkbox" id="indicatorATR"> <label for="indicatorATR">ATR(14)</label>
+        </div>
+         <div id="plotlyChartDiv"></div> <!-- Właściwy kontener na wykres Plotly -->
+         <div id="loadingIndicator" style="display: none;">Ładowanie danych...</div>
+         <div id="errorDisplay" style="color: red;"></div>
+    </div>
+
+    <!-- Dołączymy Plotly.js (najnowsza wersja z CDN) -->
+    <script src='https://cdn.plot.ly/plotly-3.0.1.min.js'></script>
+
+    <!-- Dołączymy nasz skrypt JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
