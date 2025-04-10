@@ -1,4 +1,4 @@
-﻿namespace MarketOps.Viewer.Backend.DataReading.Dto;
+﻿namespace MarketOps.Viewer.Backend.DataStore.Dto;
 
 internal record OhlcvDataPointDto(
     DateTime Timestamp,

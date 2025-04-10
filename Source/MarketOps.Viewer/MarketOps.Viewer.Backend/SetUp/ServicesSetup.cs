@@ -1,5 +1,5 @@
-﻿using MarketOps.Viewer.Backend.DataReading.Handlers;
-using Npgsql;
+﻿using MarketOps.Viewer.Backend.DataStore.Construction;
+using MarketOps.Viewer.Backend.Operations;
 
 namespace MarketOps.Viewer.Backend.SetUp;
 
@@ -7,7 +7,7 @@ internal static class ServicesSetup
 {
     public static IServiceCollection SetUpServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.SetUpPostgres(configuration);
+        services.SetUpDataStore(configuration);
 
         services.AddScoped<GetStocksHandler>();
         services.AddScoped<GetStockDataHandler>();
@@ -27,15 +27,6 @@ internal static class ServicesSetup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-
         return services;
-    }
-
-    private static void SetUpPostgres(this IServiceCollection services, IConfiguration configuration)
-    {
-        const string ConnectionStringParam = "PostgresConnection";
-
-        var connectionString = configuration.GetConnectionString(ConnectionStringParam);
-        services.AddScoped<NpgsqlConnection>(_ => new NpgsqlConnection(connectionString));
     }
 }

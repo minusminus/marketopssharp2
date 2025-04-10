@@ -1,11 +1,19 @@
+using MarketOps.Viewer.Backend.DataStore.Operations;
 using MarketOps.Viewer.Backend.Entities;
-using MarketOps.Viewer.Backend.DataReading.Handlers;
 
-namespace MarketOps.Viewer.Tests.Backend.DataReading.Handlers;
+namespace MarketOps.Viewer.Tests.Backend.DataStore.Operations;
 
 [TestFixture]
 internal class DatabaseHelperTests
 {
+    private DatabaseHelper _testObj;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _testObj = new DatabaseHelper();
+    }
+
     [TestCase(StockType.Stock, Timeframe.Daily, "public.at_dzienne0")]
     [TestCase(StockType.Index, Timeframe.Daily, "public.at_dzienne1")]
     [TestCase(StockType.IndexFuture, Timeframe.Daily, "public.at_dzienne2")]
@@ -22,7 +30,7 @@ internal class DatabaseHelperTests
         // Arrange (Dane wejœciowe dostarczone przez TestCase)
 
         // Act
-        string? result = DatabaseHelper.GetOhlcvTableName(stockType, timeframe);
+        string? result = _testObj.GetOhlcvTableName(stockType, timeframe);
 
         // Assert
         result.ShouldNotBeNull();
@@ -42,7 +50,7 @@ internal class DatabaseHelperTests
         // Arrange (Dane wejœciowe dostarczone przez TestCase)
 
         // Act
-        string? result = DatabaseHelper.GetOhlcvTableName(stockType, timeframe);
+        string? result = _testObj.GetOhlcvTableName(stockType, timeframe);
 
         // Assert
         result.ShouldBeNull();
