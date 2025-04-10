@@ -13,7 +13,9 @@ const uiHandler = {
         plotlyChartDiv: document.getElementById('plotlyChartDiv'),
         chartOptionsDiv: document.getElementById('chartOptions'),
         loadingIndicator: document.getElementById('loadingIndicator'),
-        errorDisplay: document.getElementById('errorDisplay')
+        errorDisplay: document.getElementById('errorDisplay'),
+        chartTypeCandleRadio: document.getElementById('chartTypeCandle'),
+        chartTypeLineRadio: document.getElementById('chartTypeLine')
     },
     // Przechowujemy referencję do callbacku
     showChartCallback: null,
@@ -34,6 +36,7 @@ const uiHandler = {
     },
 
     setupEventListeners() {
+		// Listener dla przycisku "Pokaż Wykres"
         this.elements.showChartButton.addEventListener('click', () => {
             this.clearError();
             const params = this.getChartRequestParams();
@@ -49,7 +52,18 @@ const uiHandler = {
                 else if (!params.startDate || !params.endDate) this.showError("Proszę wybrać zakres dat.");
             }
         });
-        // Tutaj można dodać listenery dla opcji wykresu (zmiana typu, wskaźniki)
+        // Listener dla zmiany typu wykresu
+        this.elements.chartTypeCandleRadio.addEventListener('change', () => {
+            if (this.elements.chartTypeCandleRadio.checked) {
+                chartService.updateChartType('candlestick');
+            }
+        });
+        this.elements.chartTypeLineRadio.addEventListener('change', () => {
+            if (this.elements.chartTypeLineRadio.checked) {
+                // Użyjemy 'scatter' z mode 'lines' dla wykresu liniowego
+                chartService.updateChartType('scatter');
+            }
+        });
     },
 
     async loadStocks() {
@@ -114,8 +128,17 @@ const uiHandler = {
         this.toggleChartOptions(false);
     },
 
-    toggleChartOptions(show) { /* ... (bez zmian) ... */
+    resetChartOptions() {
+        this.elements.chartTypeCandleRadio.checked = true; // Domyślnie świecowy
+        // Odznacz wskaźniki (dodamy później)
+        // this.elements.indicatorSMACheckbox.checked = false;
+    },
+
+    toggleChartOptions(show) {
          this.elements.chartOptionsDiv.style.display = show ? 'block' : 'none';
+         if (!show) {
+            this.resetChartOptions(); // Resetuj opcje, gdy są ukrywane
+         }
     }
 };
 
