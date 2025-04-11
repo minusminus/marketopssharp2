@@ -3,7 +3,7 @@ import { apiService } from './apiService.js';
 import { chartService } from './chartService.js';
 
 const uiHandler = {
-    elements: { /* ... (bez zmian - jak w poprzedniej wersji) ... */
+    elements: {
         stockSelect: document.getElementById('stockSelect'),
         startDateInput: document.getElementById('startDate'),
         endDateInput: document.getElementById('endDate'),
@@ -15,7 +15,11 @@ const uiHandler = {
         loadingIndicator: document.getElementById('loadingIndicator'),
         errorDisplay: document.getElementById('errorDisplay'),
         chartTypeCandleRadio: document.getElementById('chartTypeCandle'),
-        chartTypeLineRadio: document.getElementById('chartTypeLine')
+        chartTypeLineRadio: document.getElementById('chartTypeLine'),
+        indicatorSMACheckbox: document.getElementById('indicatorSMA'),
+        indicatorChannelCheckbox: document.getElementById('indicatorChannel'),
+        indicatorBBCheckbox: document.getElementById('indicatorBB'),
+        indicatorATRCheckbox: document.getElementById('indicatorATR'),
     },
     // Przechowujemy referencję do callbacku
     showChartCallback: null,
@@ -63,6 +67,23 @@ const uiHandler = {
                 // Użyjemy 'scatter' z mode 'lines' dla wykresu liniowego
                 chartService.updateChartType('scatter');
             }
+        });
+		// Listenery dla wskaźników
+        this.elements.indicatorSMACheckbox.addEventListener('change', (event) => {
+            chartService.toggleIndicator('SMA', event.target.checked);
+        });
+        this.elements.indicatorChannelCheckbox.addEventListener('change', (event) => {
+            chartService.toggleIndicator('Channel', event.target.checked);
+        });
+        this.elements.indicatorBBCheckbox.addEventListener('change', (event) => {
+            chartService.toggleIndicator('BB', event.target.checked);
+        });
+        this.elements.indicatorATRCheckbox.addEventListener('change', (event) => {
+            // ATR będzie potrzebował osobnego panelu, obsłużymy go inaczej
+            // Na razie zostawmy jako TODO lub prosty log
+             console.log(`ATR Toggled: ${event.target.checked}`);
+             chartService.toggleIndicator('ATR', event.target.checked); // Przekaż do serwisu
+            // TODO: Implementacja dodawania/usuwania panelu ATR
         });
     },
 
@@ -130,8 +151,10 @@ const uiHandler = {
 
     resetChartOptions() {
         this.elements.chartTypeCandleRadio.checked = true; // Domyślnie świecowy
-        // Odznacz wskaźniki (dodamy później)
-        // this.elements.indicatorSMACheckbox.checked = false;
+        this.elements.indicatorSMACheckbox.checked = false;
+        this.elements.indicatorChannelCheckbox.checked = false;
+        this.elements.indicatorBBCheckbox.checked = false;
+        this.elements.indicatorATRCheckbox.checked = false;
     },
 
     toggleChartOptions(show) {
