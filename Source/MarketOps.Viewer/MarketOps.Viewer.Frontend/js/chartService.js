@@ -1,14 +1,19 @@
 // js/chartService.js
 import { getOhlcvLayout, getPriceTrace, getVolumeTrace } from './chartStyleConfig.js'; // Import konfiguracji
-import { getSmaTrace, getPriceChannelTraces, getBollingerBandsTraces, getAtrTrace } from './chartStyleConfig.js';
 
-// Upewnijmy się, że biblioteka jest dostępna globalnie
-// Sprawdź istnienie kilku kluczowych funkcji bezpośrednio w globalnym zakresie (window)
-if (typeof sma !== 'function' || typeof bollingerbands !== 'function' || typeof atr !== 'function') {
-    console.error("Wygląda na to, że funkcje biblioteki technicalindicators nie są dostępne globalnie!");
-    // Zablokuj funkcjonalność wskaźników lub rzuć błąd
-    // Można by stworzyć "pusty" obiekt ti, aby uniknąć błędów dalej, ale lepiej dać znać o problemie
-}
+// Importuj moduły wskaźników
+import { smaIndicator } from './indicators/smaIndicator.js';
+import { channelIndicator } from './indicators/channelIndicator.js';
+import { bbIndicator } from './indicators/bbIndicator.js';
+import { atrIndicator } from './indicators/atrIndicator.js';
+
+// Mapowanie kluczy stanu na moduły wskaźników
+const indicatorModules = {
+    SMA: smaIndicator,
+    Channel: channelIndicator,
+    BB: bbIndicator,
+    ATR: atrIndicator
+};
 
 const chartService = {
     currentChartData: null,
@@ -21,7 +26,7 @@ const chartService = {
         BB: { enabled: false, period: 20, stdDev: 2, data: null, traceIndexes: [] },
         ATR: { enabled: false, period: 14, data: null, traceIndexes: [], yaxis: 'y3' } // ATR będzie na osi y3
     },
-    calculatedIndicatorData: null, // Obiekt przechowujący wszystkie obliczone wskaźniki
+    calculatedIndicatorData: {}, // Zmieniamy na obiekt, klucze to np. 'SMA', 'BB'
 
     drawChart(chartDivId, apiData, stockInfo) {
 		this.clearChart(chartDivId); // To wywołuje _resetIndicatorState
@@ -30,6 +35,7 @@ const chartService = {
         this.currentStockInfo = stockInfo;
         this.chartDivId = chartDivId;
         this.currentChartType = 'candlestick'; // Resetuj do domyślnego przy nowym rysowaniu
+		this._resetIndicatorState();
 
         if (!apiData || apiData.length === 0) {
             console.error("Brak danych do narysowania wykresu.");
@@ -50,9 +56,7 @@ const chartService = {
             // Użyj zaimportowanych funkcji do stworzenia śladów i layoutu
             const priceTrace = getPriceTrace(this.currentChartType, dates, opens, highs, lows, closes, stockInfo);
             const volumeTrace = getVolumeTrace(dates, volumes);
-			
 			const traces = [priceTrace, volumeTrace];
-			
             const layout = this._getLayoutWithIndicators(); // Nowa funkcja tworząca layout
 
             const chartElement = document.getElementById(chartDivId);
@@ -187,222 +191,111 @@ const chartService = {
 
         this.calculatedIndicatorData = {}; // Zresetuj obliczone dane
 
-        try {
-            // Oblicz SMA
-            const smaPeriod = this.indicatorState.SMA.period;
-            if (input.close.length >= smaPeriod) {
-                this.calculatedIndicatorData.SMA = sma({ period: smaPeriod, values: input.close });
-            } else { this.calculatedIndicatorData.SMA = []; }
-
-
-            // Oblicz Kanał Cenowy (wymaga high i low)
-            const channelPeriod = this.indicatorState.Channel.period;
-             if (input.high.length >= channelPeriod && input.low.length >= channelPeriod) {
-                 // Biblioteka technicalindicators nie ma wprost kanału Donchiana/Price Channel
-                 // Musimy go zaimplementować ręcznie lub użyć innej logiki.
-                 // Poniżej prosta implementacja: Max(High) i Min(Low) w okresie.
-                 this.calculatedIndicatorData.Channel = { upper: [], lower: [] };
-                 for (let i = 0; i < input.high.length; i++) {
-                     if (i < channelPeriod - 1) {
-                         this.calculatedIndicatorData.Channel.upper.push(null);
-                         this.calculatedIndicatorData.Channel.lower.push(null);
-                     } else {
-                         const highsSlice = input.high.slice(i - channelPeriod + 1, i + 1);
-                         const lowsSlice = input.low.slice(i - channelPeriod + 1, i + 1);
-                         this.calculatedIndicatorData.Channel.upper.push(Math.max(...highsSlice));
-                         this.calculatedIndicatorData.Channel.lower.push(Math.min(...lowsSlice));
-                     }
-                 }
-             } else { this.calculatedIndicatorData.Channel = { upper: [], lower: [] }; }
-
-            // Oblicz Bollinger Bands
-            const bbPeriod = this.indicatorState.BB.period;
-            const bbStdDev = this.indicatorState.BB.stdDev;
-            if (input.close.length >= bbPeriod) {
-                this.calculatedIndicatorData.BB = bollingerbands({ period: bbPeriod, values: input.close, stdDev: bbStdDev });
-                 // Wynik BB to tablica obiektów { middle, upper, lower }
-            } else { this.calculatedIndicatorData.BB = []; }
-
-            // Oblicz ATR
-            const atrPeriod = this.indicatorState.ATR.period;
-             if (input.high.length >= atrPeriod && input.low.length >= atrPeriod && input.close.length >= atrPeriod) {
-                const atrInput = { high: input.high, low: input.low, close: input.close, period: atrPeriod };
-                this.calculatedIndicatorData.ATR = atr(atrInput);
-            } else { this.calculatedIndicatorData.ATR = []; }
-
-
-            console.log("Wskaźniki obliczone.");
-            // console.log(this.calculatedIndicatorData); // Do debugowania
-
-        } catch (error) {
-            console.error("Błąd podczas obliczania wskaźników:", error);
-            this.calculatedIndicatorData = null; // Wyczyść w razie błędu
+        for (const key in indicatorModules) {
+            const module = indicatorModules[key];
+            const state = this.indicatorState[key];
+            if (module && typeof module.calculate === 'function') {
+                // Przekaż odpowiednie parametry do funkcji calculate
+                let result;
+                if (key === 'BB') {
+                    result = module.calculate(input, state.period, state.stdDev);
+                } else if (key === 'ATR' || key === 'Channel' || key === 'SMA'){ // Dostosuj, jeśli inne wskaźniki potrzebują specyficznych parametrów
+                     result = module.calculate(input, state.period);
+                } else {
+                     result = module.calculate(input, state.period); // Domyślnie przekazuj okres
+                }
+                this.calculatedIndicatorData[key] = result; // Zapisz wynik (może być null)
+                if (!result) {
+                    console.warn(`Nie udało się obliczyć wskaźnika: ${key}`);
+                }
+            }
         }
+        console.log("Wskaźniki obliczone (lub próba obliczenia zakończona).");
     },
 
      toggleIndicator(indicatorKey, isEnabled) {
-         if (!this.chartDivId || !this.calculatedIndicatorData) {
-             console.warn("Nie można przełączyć wskaźnika - brak wykresu lub obliczonych danych.");
+         if (!this.chartDivId) {
+             console.warn("Nie można przełączyć wskaźnika - brak wykresu.");
              return;
          }
-        // Oblicz wskaźniki, jeśli jeszcze nie zostały obliczone (np. przy pierwszym przełączeniu)
-        if (!this.calculatedIndicatorData) {
-             this.calculateIndicators();
-        }
-        // Sprawdź ponownie po obliczeniu
-        if(!this.calculatedIndicatorData){
-            console.warn("Nie udało się obliczyć danych wskaźników.");
-            // Można spróbować odznaczyć checkbox w UI (trudniejsze)
+
+        const state = this.indicatorState[indicatorKey];
+        const module = indicatorModules[indicatorKey]; // Pobierz odpowiedni moduł
+
+        if (!state || !module) {
+            console.error(`Nieznany klucz wskaźnika lub brak modułu: ${indicatorKey}`);
             return;
         }
-         if (!this.indicatorState[indicatorKey]) {
-             console.error(`Nieznany klucz wskaźnika: ${indicatorKey}`);
-             return;
-         }
+        if (state.enabled === isEnabled) return;
+		 
+        // Oblicz wskaźniki, jeśli jeszcze nie ma dla TEGO klucza
+        // (lub jeśli logika wymaga ponownego obliczenia przy zmianie parametrów - na razie nie mamy)
+        if (!this.calculatedIndicatorData || this.calculatedIndicatorData[indicatorKey] === undefined) {
+             console.warn(`Dane dla wskaźnika ${indicatorKey} nieobliczone. Próbuję obliczyć wszystkie.`);
+             this.calculateIndicators();
+        }
+        // Sprawdź ponownie
+        const indicatorResult = this.calculatedIndicatorData[indicatorKey]; // Może być null, jeśli obliczenie zawiodło
 
-         const state = this.indicatorState[indicatorKey];
-		 if (state.enabled === isEnabled) return;
-         state.enabled = isEnabled; // Zaktualizuj stan
-         const chartElement = document.getElementById(this.chartDivId);
-         if (!chartElement) return;
+        state.enabled = isEnabled;
+        const chartElement = document.getElementById(this.chartDivId);
+        if (!chartElement) return;
+        console.log(`Przełączanie wskaźnika ${indicatorKey} na ${isEnabled}`);
 
-         console.log(`Przełączanie wskaźnika ${indicatorKey} na ${isEnabled}`);
+        if (isEnabled) {
+            // --- Dodawanie wskaźnika ---
+             if (indicatorResult === null) { // Sprawdź, czy obliczenie się powiodło
+                 console.warn(`Nie można dodać wskaźnika ${indicatorKey}, brak poprawnych danych.`);
+                 state.enabled = false; // Cofnij zmianę stanu
+                 // TODO: Odznacz checkbox w UI?
+                 return;
+             }
 
-         if (isEnabled) {
-             // --- Dodawanie wskaźnika ---
-             let tracesToAdd = [];
-             const allDates = this.currentChartData.map(item => item.timestamp.substring(0, 10));
-			 const dataLength = allDates.length;
+            let tracesToAdd = [];
+            const allDates = this.currentChartData.map(item => item.timestamp.substring(0, 10));
 
-             try {
-                 switch (indicatorKey) {
-                    case 'SMA': { // Używamy bloku, aby 'period' i 'indicatorData' miały lokalny zasięg
-                        const period = state.period;
-                        // Pobierz wynik z biblioteki (może być krótszy)
-                        const indicatorResult = this.calculatedIndicatorData.SMA;
-                        if (indicatorResult) {
-                            const validStartIndex = period - 1;
-                            const nullPaddingCount = validStartIndex; // Liczba nulli do dodania
-                            const expectedResultLength = dataLength - nullPaddingCount; // Oczekiwana długość wyniku z biblioteki
+            try {
+                // Wywołaj getTraces z odpowiedniego modułu
+                tracesToAdd = module.getTraces(allDates, indicatorResult, state);
 
-                            console.log(`SMA - Data L: ${dataLength}, Period: ${period}, Expected Result L: ${expectedResultLength}, Actual Result L: ${indicatorResult.length}`); // DEBUG
-
-                            // Sprawdź, czy długość wyniku z biblioteki jest zgodna z oczekiwaniami
-                            if (indicatorResult.length === expectedResultLength) {
-                                // Stwórz tablicę z nullami na początku
-                                const valuesForPlotly = Array(nullPaddingCount).fill(null).concat(indicatorResult);
-
-                                console.log(`SMA Padded - Dates L: ${allDates.length}, Padded Values L: ${valuesForPlotly.length}`); // DEBUG
-
-                                if(allDates.length === valuesForPlotly.length) {
-                                    tracesToAdd.push(getSmaTrace(allDates, valuesForPlotly, period));
-                                } else { console.error("SMA - Niezgodność długości po paddingu!"); }
-                            } else {
-                                console.warn(`SMA - Niezgodna długość wyniku z biblioteki (${indicatorResult.length} vs ${expectedResultLength} oczekiwano). Nie dodaję śladu.`);
-                            }
-                        } else { console.warn("SMA - Brak obliczonych danych."); }
-                        break;
-                    }
-                    case 'Channel': {
-                        const period = state.period;
-                        const indicatorData = this.calculatedIndicatorData.Channel;
-                        if (indicatorData && indicatorData.upper.length > 0) {
-                            const validStartIndex = period - 1;
-                            if (validStartIndex < allDates.length) {
-                                const dates = allDates.slice(validStartIndex);
-                                const upperValues = indicatorData.upper.slice(validStartIndex);
-                                const lowerValues = indicatorData.lower.slice(validStartIndex);
-                                tracesToAdd.push(...getPriceChannelTraces(dates, upperValues, lowerValues, period));
-                            }
+                 if (tracesToAdd && tracesToAdd.length > 0) {
+                    Plotly.addTraces(chartElement, tracesToAdd).then(() => {
+                        // ... (aktualizacja traceIndexes - logika bez zmian) ...
+                        const currentTraceCount = chartElement.data ? chartElement.data.length : 0;
+                        state.traceIndexes = [];
+                        for (let i = 0; i < tracesToAdd.length; i++) {
+                            state.traceIndexes.push(currentTraceCount - tracesToAdd.length + i);
                         }
-                        break;
-                    }
-                    case 'BB': {
-                        const period = state.period;
-                        const indicatorResult = this.calculatedIndicatorData.BB; // Tablica obiektów {middle, upper, lower}
-                        if (indicatorResult) {
-                            const validStartIndex = period - 1;
-                            const nullPaddingCount = validStartIndex;
-                            const expectedResultLength = dataLength - nullPaddingCount;
-
-                             console.log(`BB - Data L: ${dataLength}, Period: ${period}, Expected Result L: ${expectedResultLength}, Actual Result L: ${indicatorResult.length}`); // DEBUG
-
-                            if (indicatorResult.length === expectedResultLength) {
-                                const valuesForPlotly = {
-                                     middle: Array(nullPaddingCount).fill(null).concat(indicatorResult.map(d => d?.middle)),
-                                     upper: Array(nullPaddingCount).fill(null).concat(indicatorResult.map(d => d?.upper)),
-                                     lower: Array(nullPaddingCount).fill(null).concat(indicatorResult.map(d => d?.lower))
-                                 };
-                                console.log(`BB Padded - Dates L: ${allDates.length}, Padded Middle L: ${valuesForPlotly.middle.length}`); // DEBUG
-                                if(allDates.length === valuesForPlotly.middle.length) {
-                                    tracesToAdd.push(...getBollingerBandsTraces(allDates, valuesForPlotly, state.period, state.stdDev));
-                                 } else { console.error("BB - Niezgodność długości po paddingu!"); }
-                            } else {
-                                 console.warn(`BB - Niezgodna długość wyniku z biblioteki (${indicatorResult.length} vs ${expectedResultLength} oczekiwano). Nie dodaję śladu.`);
-                            }
-                        } else { console.warn("BB - Brak obliczonych danych."); }
-                        break;
-                    }
-                    case 'ATR': {
-                        const period = state.period;
-                        const indicatorResult = this.calculatedIndicatorData.ATR;
-                        if (indicatorResult) {
-                             // Zakładamy, że ATR zaczyna się od indeksu 'period'
-                             const validStartIndex = period;
-                             const nullPaddingCount = validStartIndex;
-                             const expectedResultLength = dataLength - nullPaddingCount;
-
-                             console.log(`ATR - Data L: ${dataLength}, Period: ${period}, Expected Result L: ${expectedResultLength}, Actual Result L: ${indicatorResult.length}`); // DEBUG
-
-                             if (indicatorResult.length === expectedResultLength) {
-                                const valuesForPlotly = Array(nullPaddingCount).fill(null).concat(indicatorResult);
-                                console.log(`ATR Padded - Dates L: ${allDates.length}, Padded Values L: ${valuesForPlotly.length}`); // DEBUG
-
-                                 if(allDates.length === valuesForPlotly.length) {
-                                     tracesToAdd.push(getAtrTrace(allDates, valuesForPlotly, state.period, state.yaxis));
-                                     const layoutUpdate = this._getLayoutWithIndicators();
-                                     Plotly.relayout(chartElement, layoutUpdate);
-                                 } else { console.error("ATR - Niezgodność długości po paddingu!"); }
-                             } else {
-                                 console.warn(`ATR - Niezgodna długość wyniku z biblioteki (${indicatorResult.length} vs ${expectedResultLength} oczekiwano). Nie dodaję śladu.`);
-                             }
-                         } else { console.warn("ATR - Brak obliczonych danych."); }
-                        break;
-                    }
-                 }
-
-                 if (tracesToAdd.length > 0) {
-                     Plotly.addTraces(chartElement, tracesToAdd);
-                     // Zapisz indeksy dodanych śladów (ważne dla usuwania)
-                     const currentTraceCount = chartElement.data ? chartElement.data.length : 0;
-                     state.traceIndexes = [];
-                     for (let i = 0; i < tracesToAdd.length; i++) {
-                         state.traceIndexes.push(currentTraceCount - tracesToAdd.length + i);
+                        console.log(`Dodano ślady dla ${indicatorKey}, nowe indeksy:`, state.traceIndexes);
+                    });
+                     // Aktualizuj layout TYLKO jeśli to ATR (lub inny wskaźnik wymagający zmiany layoutu)
+                     if (indicatorKey === 'ATR') {
+                        const layoutUpdate = this._getLayoutWithIndicators();
+                        Plotly.relayout(chartElement, layoutUpdate);
                      }
-                     console.log(`Dodano ślady dla ${indicatorKey}, indeksy:`, state.traceIndexes);
                  } else {
-                      console.warn(`Brak danych lub błąd przy tworzeniu śladu dla wskaźnika ${indicatorKey}`);
-                       state.enabled = false; // Wyłącz, jeśli nie udało się dodać
-                       // Można też odznaczyć checkbox w UI (wymagałoby komunikacji zwrotnej do uiHandler)
+                      console.warn(`Moduł ${indicatorKey} nie zwrócił śladów do dodania.`);
+                      state.enabled = false; // Cofnij zmianę stanu
                  }
-             } catch (error) {
-                  console.error(`Błąd podczas dodawania wskaźnika ${indicatorKey}:`, error);
-                  state.enabled = false; // Wyłącz w razie błędu
-             }
+            } catch (error) {
+                 console.error(`Błąd podczas generowania śladów dla ${indicatorKey}:`, error);
+                 state.enabled = false;
+            }
 
-         } else {
-             // --- Usuwanie wskaźnika ---
-             if (state.traceIndexes && state.traceIndexes.length > 0) {
-                 Plotly.deleteTraces(chartElement, state.traceIndexes);
-                 console.log(`Usunięto ślady dla ${indicatorKey}, indeksy:`, state.traceIndexes);
-                 state.traceIndexes = []; // Wyczyść zapisane indeksy
-             }
-             // Jeśli usuwamy ATR, potencjalnie chcemy usunąć oś y3 i dostosować inne domeny
-             if (indicatorKey === 'ATR') {
-                  const layoutUpdate = this._getLayoutWithIndicators(); // Pobierz layout bez ATR
-                  Plotly.update(chartElement, {}, layoutUpdate); // Zaktualizuj layout
-             }
-         }
+        } else {
+            // --- Usuwanie wskaźnika ---
+            if (state.traceIndexes && state.traceIndexes.length > 0) {
+                const sortedIndexes = [...state.traceIndexes].sort((a, b) => b - a);
+                Plotly.deleteTraces(chartElement, sortedIndexes).then(() => {
+                    console.log(`Usunięto ślady dla ${indicatorKey}, indeksy:`, sortedIndexes);
+                    state.traceIndexes = [];
+                    if (indicatorKey === 'ATR') {
+                         const layoutUpdate = this._getLayoutWithIndicators();
+                         Plotly.relayout(chartElement, layoutUpdate);
+                    }
+                });
+            } else { /* ... */ }
+        }
      },
 
      _getLayoutWithIndicators() {
