@@ -47,35 +47,38 @@
             </div>
 
             <div class="control-group button-group"> <!-- Grupa dla przycisku -->
-                <button id="showChartButton" class="button-primary">Pokaż Wykres</button>
+                <button id="addChartTabButton" class="button-primary">Dodaj Wykres</button>
             </div>
         </div>
 
-        <!-- Kontener na wykres -->
-        <div id="chartArea" class="chart-area"> <!-- Zmieniono ID dla jasności -->
-            <div id="chartOptions" class="chart-options" style="display: none;">
-                <div class="option-group">
-                    <span class="option-label">Typ wykresu:</span>
-                    <input type="radio" id="chartTypeCandle" name="chartType" value="candle" checked> <label for="chartTypeCandle">Świecowy</label>
-                    <input type="radio" id="chartTypeLine" name="chartType" value="line"> <label for="chartTypeLine">Liniowy</label>
+        <!-- Kontener na zakładki i ich zawartość -->
+        <div class="tabs-container">
+            <!-- Pasek z przyciskami zakładek -->
+            <div id="tabButtons" class="tab-buttons">
+                <!-- Przyciski zakładek będą dodawane dynamicznie przez JS -->
+                <!-- Przykład:
+                <button class="tab-button active" data-tab-id="chart-tab-1">
+                    PKO <span class="close-tab-btn" data-tab-id="chart-tab-1">×</span>
+                </button>
+                -->
+            </div>
+
+            <!-- Kontener na zawartość zakładek (panele wykresów) -->
+            <div id="tabContent" class="tab-content">
+                <!-- Panele wykresów będą dodawane dynamicznie przez JS -->
+                <!-- Przykład panelu dla jednej zakładki:
+                <div id="chart-tab-1" class="tab-pane active">
+                    <div class="chart-options"> ... opcje dla tej zakładki ... </div>
+                    <div class="plotly-chart-div"> ... wykres dla tej zakładki ... </div>
+                    <div class="loading-indicator" style="display: none;"> ... </div>
+                    <div class="error-display"></div>
                 </div>
-                 <div class="option-group">
-                    <span class="option-label">Wskaźniki:</span>
-                    <input type="checkbox" id="indicatorSMA"> <label for="indicatorSMA">SMA(20)</label>
-                    <input type="checkbox" id="indicatorChannel"> <label for="indicatorChannel">Kanał Ceny(20)</label>
-                    <input type="checkbox" id="indicatorBB"> <label for="indicatorBB">Bollinger(20, 2)</label>
-                    <input type="checkbox" id="indicatorATR"> <label for="indicatorATR">ATR(14)</label>
+                 -->
+                 <div id="noTabsMessage" class="no-tabs-message">
+                     Wybierz instrument i kliknij "Dodaj Wykres", aby otworzyć nową zakładkę.
                  </div>
             </div>
-			<div id="plotlyChartDiv" class="plotly-chart-div"> <!-- Właściwy kontener na wykres -->
-				<div id="loadingIndicator" class="loading-indicator" style="display: none;">
-				<!-- Można tu wstawić SVG spinnera lub użyć CSS -->
-				<div class="spinner"></div>
-				Ładowanie danych...
-				</div>
-			</div> 
-			<div id="errorDisplay" class="error-display"></div>
-        </div>
+        </div>		
 
     </div>
 	<!-- Koniec app-container -->

@@ -218,3 +218,127 @@ select:focus {
     font-size: 0.9em;
     min-height: 1.2em; /* Zapobiega skakaniu layoutu */
 }
+
+/* --- Kontener Zakładek --- */
+.tabs-container {
+    margin-top: 20px;
+}
+
+.tab-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Pozwól przyciskom się zawijać */
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: -1px; /* Schowaj dolną ramkę pod ramką contentu */
+}
+
+.tab-button {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    border-bottom: none; /* Usuń dolną ramkę przycisku */
+    background-color: #f1f1f1; /* Domyślne tło nieaktywnej */
+    margin-right: 5px;
+    margin-bottom: -1px; /* Podnieś przycisk, aby nachodził na ramkę contentu */
+    border-radius: 5px 5px 0 0; /* Zaokrąglenie tylko górnych rogów */
+    font-size: 0.9em;
+    color: var(--light-text-color);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    position: relative; /* Dla przycisku zamykania */
+    max-width: 180px; /* Ogranicz szerokość przycisku */
+    overflow: hidden; /* Ukryj zbyt długi tekst */
+    text-overflow: ellipsis; /* Dodaj wielokropek */
+    white-space: nowrap; /* Zapobiegaj łamaniu tekstu */
+}
+
+.tab-button:hover {
+    background-color: #ddd;
+}
+
+.tab-button.active {
+    background-color: var(--container-bg-color); /* Tło aktywnej zakładki takie jak content */
+    border-color: var(--border-color);
+    border-bottom: 1px solid var(--container-bg-color); /* "Wytnij" dolną ramkę */
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* Przycisk zamykania zakładki */
+.close-tab-btn {
+    margin-left: 8px;
+    font-weight: bold;
+    color: var(--light-text-color);
+    cursor: pointer;
+    padding: 0 4px;
+    border-radius: 3px;
+}
+
+.close-tab-btn:hover {
+    color: var(--danger-color);
+    background-color: #eee;
+}
+
+.tab-content {
+    border: 1px solid var(--border-color);
+    padding: 0; /* Usunięte padding, bo będzie w .tab-pane */
+    border-radius: 0 0 8px 8px; /* Zaokrąglenie dolnych rogów */
+    background-color: var(--container-bg-color);
+    min-height: 550px; /* Minimalna wysokość */
+}
+
+.tab-pane {
+    display: none; /* Domyślnie ukryj wszystkie panele */
+    padding: 15px; /* Padding wewnątrz panelu */
+    animation: fadeIn 0.3s; /* Prosta animacja pojawiania */
+}
+
+.tab-pane.active {
+    display: block; /* Pokaż tylko aktywny panel */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Wiadomość, gdy nie ma zakładek */
+.no-tabs-message {
+    padding: 40px;
+    text-align: center;
+    color: var(--light-text-color);
+    font-style: italic;
+}
+
+
+/* Dostosowanie dla wykresu w zakładce */
+.tab-pane .chart-area { /* Usuwamy zewnętrzne style kontenera wykresu */
+     border: none;
+     padding: 0;
+     margin-top: 0;
+     box-shadow: none;
+     min-height: auto; /* Resetujemy min-height, bo .tab-content ją ma */
+     background-color: transparent; /* Usuwamy tło, bo .tab-content je ma */
+}
+
+.tab-pane .plotly-chart-div {
+     height: 600px; /* Ustaw wysokość wykresu w zakładce */
+     /* Upewnij się, że ma position: relative dla loading indicator */
+     position: relative;
+     background-color: #eee; /* Tło dla pustego wykresu */
+}
+
+.tab-pane .chart-options {
+    /* Style dla opcji w zakładce mogą pozostać takie same */
+     margin-bottom: 15px;
+     padding-bottom: 15px;
+     border-bottom: 1px dashed var(--border-color);
+}
+
+.tab-pane .loading-indicator {
+    /* Style dla loadingu w zakładce mogą pozostać takie same */
+     position: absolute;
+     /* ... reszta stylów loading ... */
+}
+.tab-pane .error-display {
+     /* Style dla błędów w zakładce mogą pozostać takie same */
+      margin-top: 10px;
+}
