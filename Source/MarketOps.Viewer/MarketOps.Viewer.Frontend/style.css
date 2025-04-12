@@ -1,65 +1,220 @@
+/* --- Globalne Ustawienia --- */
+:root {
+    /* Definicje kolorów - łatwe do zmiany */
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --text-color: #333;
+    --light-text-color: #666;
+    --background-color: #f8f9fa;
+    --container-bg-color: #ffffff;
+    --border-color: #dee2e6;
+    --input-border-color: #ced4da;
+    --danger-color: #dc3545;
+}
+
 body {
-    font-family: sans-serif;
-    margin: 15px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Lepszy stack czcionek */
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    margin: 0; /* Usunięte przez normalize, ale dla pewności */
 }
 
-#controls {
-    margin-bottom: 20px;
+.app-container {
+    max-width: 1600px; /* Ogranicz szerokość dla dużych ekranów, ale wykres może się rozciągać */
+    margin: 0 auto;
     padding: 15px;
-    border: 1px solid #ccc;
+}
+
+.app-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 20px;
     border-radius: 5px;
-    background-color: #f9f9f9;
 }
 
-#controls label {
-    margin-right: 5px;
-    margin-left: 10px;
-}
-#controls label:first-child {
-    margin-left: 0;
+.app-header h1 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 500;
 }
 
-#controls select,
-#controls input[type="date"],
-#controls button {
-    padding: 5px;
-    margin-right: 10px;
+/* --- Kontener Kontrolek --- */
+.controls-container {
+    background-color: var(--container-bg-color);
+    padding: 15px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    /* Flexbox do ułożenia grup kontrolek */
+    display: flex;
+    flex-wrap: wrap; /* Zezwól na zawijanie na mniejszych ekranach */
+    gap: 15px; /* Odstęp między grupami kontrolek */
+    align-items: flex-end; /* Wyrównaj elementy do dołu (przydatne dla przycisku) */
 }
 
-.chart-container {
-    border: 1px solid #ddd;
-    padding: 10px;
+.control-group {
+    display: flex;
+    flex-direction: column; /* Etykieta nad kontrolką */
+    flex-grow: 1; /* Pozwól grupom rosnąć */
+    min-width: 150px; /* Minimalna szerokość grupy */
+}
+
+.control-group label,
+.option-label { /* Styl dla etykiet i opisów grup opcji */
+    font-size: 0.85em;
+    color: var(--light-text-color);
+    margin-bottom: 5px;
+    display: block; /* Etykieta w nowej linii */
+}
+
+/* Specjalne ustawienia dla grupy przycisku */
+.button-group {
+    flex-grow: 0; /* Nie pozwól przyciskowi się rozciągać */
+    align-self: flex-end; /* Wyrównaj sam przycisk do dołu */
+    min-width: auto; /* Zresetuj min-width */
+    margin-bottom: 5px; /* Mały margines dolny, aby zrównać z inputami */
+}
+
+/* --- Stylizacja Formularzy --- */
+input[type="date"],
+select {
+    width: 100%; /* Rozciągnij do szerokości .control-group */
+    padding: 8px 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+    font-size: 0.9em;
+    background-color: white;
+    box-sizing: border-box; /* Padding i border wliczane w szerokość */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type="date"]:focus,
+select:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Efekt focus */
+}
+
+/* Stylizacja przycisku */
+.button-primary {
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 8px 15px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    border-radius: 4px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.button-primary:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+}
+
+.button-primary:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+/* --- Kontener Wykresu --- */
+.chart-area {
+    /* Wykres zajmuje pełną dostępną szerokość dzięki braku max-width tutaj */
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     margin-top: 20px;
-    min-height: 500px; /* Minimalna wysokość dla wykresu */
-    position: relative; /* Potrzebne dla absolutnego pozycjonowania np. loading */
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-height: 500px;
 }
 
-#plotlyChartDiv {
+.plotly-chart-div {
     width: 100%;
-    height: 600px; /* Możesz dostosować wysokość */
+    height: 650px; /* Zwiększ wysokość, jeśli trzeba */
+    position: relative; /* ---- WAŻNE: Ustaw kontekst pozycjonowania ---- */
+    background-color: #eee; /* ---- DODAJ: Lekkie tło, widoczne gdy wykres jest pusty lub się ładuje ---- */
 }
 
-#loadingIndicator {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 5px;
-    font-size: 1.2em;
+/* Opcje nad wykresem */
+.chart-options {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
+    display: flex; /* Ułóż grupy opcji obok siebie */
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 0.9em;
 }
 
-#chartOptions {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
+.option-group {
+    display: flex;
+    align-items: center; /* Wyrównaj elementy w pionie */
+    gap: 5px; /* Mały odstęp między checkboxami/radios */
 }
 
-#chartOptions label {
+.option-group label { /* Etykiety przy checkbox/radio */
+    margin-bottom: 0; /* Usuń dolny margines */
     margin-right: 5px;
-    margin-left: 10px;
+    color: var(--text-color); /* Ciemniejszy kolor niż etykiety grup */
+    font-size: 0.95em;
 }
 
-/* Style dla zakładek (dodamy później) */
-/* ... */
+.option-group input[type="radio"],
+.option-group input[type="checkbox"] {
+    margin-right: 2px; /* Zmniejsz odstęp po inpucie */
+}
+
+/* Wskaźnik ładowania */
+.loading-indicator {
+    position: absolute;   /* ---- ZMIANA: Pozycjonowanie absolutne ---- */
+    top: 50%;            /* ---- ZMIANA: Wyśrodkowanie w pionie (początek) ---- */
+    left: 50%;           /* ---- ZMIANA: Wyśrodkowanie w poziomie (początek) ---- */
+    transform: translate(-50%, -50%); /* ---- ZMIANA: Dokładne wyśrodkowanie ---- */
+    background-color: rgba(255, 255, 255, 0.85); /* Bardziej kryjące tło */
+    z-index: 10; /* Upewnij się, że jest nad wykresem */
+    display: flex; /* Wyśrodkowanie spinnera i tekstu */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1em;
+    color: var(--text-color);
+    padding: 20px 30px; /* Trochę więcej paddingu */
+    border-radius: 8px; /* Zaokrąglenie */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtelny cień */
+    text-align: center;
+}
+
+/* Prosty CSS Spinner */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: var(--primary-color);
+    margin-bottom: 10px;
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Komunikaty o błędach */
+.error-display {
+    color: var(--danger-color);
+    margin-top: 10px;
+    font-size: 0.9em;
+    min-height: 1.2em; /* Zapobiega skakaniu layoutu */
+}

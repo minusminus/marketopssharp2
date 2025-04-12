@@ -4,53 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wykresy Giełdowe</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css"> <!-- Link do naszego pliku CSS -->
 </head>
 <body>
 
-    <h1>Wykresy Giełdowe</h1>
+    <!-- Główny kontener aplikacji -->
+    <div class="app-container">
 
-    <!-- Kontener na kontrolki -->
-    <div id="controls">
-        <label for="stockSelect">Instrument:</label>
-        <select id="stockSelect">
-            <option value="">Ładowanie...</option>
-        </select>
+        <header class="app-header">
+            <h1>Wykresy Giełdowe</h1>
+            <!-- Można dodać logo lub inne elementy -->
+        </header>
 
-        <label for="startDate">Data od:</label>
-        <input type="date" id="startDate">
+        <!-- Kontener na kontrolki -->
+        <div id="controls" class="controls-container">
+            <!-- Każda para label+input/select w osobnym divie dla łatwiejszego flexboxa -->
+            <div class="control-group">
+                <label for="stockSelect">Instrument:</label>
+                <select id="stockSelect">
+                    <option value="">Ładowanie...</option>
+                </select>
+            </div>
 
-        <label for="endDate">Data do:</label>
-        <input type="date" id="endDate">
+            <div class="control-group">
+                <label for="startDate">Data od:</label>
+                <input type="date" id="startDate">
+            </div>
 
-        <label for="timeframeSelect">Interwał:</label>
-        <select id="timeframeSelect">
-            <option value="daily" selected>Dzienny</option>
-            <option value="weekly">Tygodniowy</option>
-            <option value="monthly">Miesięczny</option>
-        </select>
+            <div class="control-group">
+                <label for="endDate">Data do:</label>
+                <input type="date" id="endDate">
+            </div>
 
-        <button id="showChartButton">Pokaż Wykres</button>
-    </div>
+            <div class="control-group">
+                <label for="timeframeSelect">Interwał:</label>
+                <select id="timeframeSelect">
+                    <option value="daily" selected>Dzienny</option>
+                    <option value="weekly">Tygodniowy</option>
+                    <option value="monthly">Miesięczny</option>
+                </select>
+            </div>
 
-    <!-- Na razie miejsce na JEDEN wykres -->
-    <div id="chartContainer" class="chart-container">
-        <!-- Tutaj Plotly umieści wykres -->
-        <div id="chartOptions" style="display: none;"> <!-- Opcje dla wykresu, ukryte na początku -->
-             <label>Typ wykresu:</label>
-             <input type="radio" id="chartTypeCandle" name="chartType" value="candle" checked> <label for="chartTypeCandle">Świecowy</label>
-             <input type="radio" id="chartTypeLine" name="chartType" value="line"> <label for="chartTypeLine">Liniowy</label>
-             <br>
-             <label>Wskaźniki:</label>
-             <input type="checkbox" id="indicatorSMA"> <label for="indicatorSMA">SMA(20)</label>
-             <input type="checkbox" id="indicatorChannel"> <label for="indicatorChannel">Kanał Ceny(20)</label>
-             <input type="checkbox" id="indicatorBB"> <label for="indicatorBB">Bollinger(20, 2)</label>
-             <input type="checkbox" id="indicatorATR"> <label for="indicatorATR">ATR(14)</label>
+            <div class="control-group button-group"> <!-- Grupa dla przycisku -->
+                <button id="showChartButton" class="button-primary">Pokaż Wykres</button>
+            </div>
         </div>
-         <div id="plotlyChartDiv"></div> <!-- Właściwy kontener na wykres Plotly -->
-         <div id="loadingIndicator" style="display: none;">Ładowanie danych...</div>
-         <div id="errorDisplay" style="color: red;"></div>
+
+        <!-- Kontener na wykres -->
+        <div id="chartArea" class="chart-area"> <!-- Zmieniono ID dla jasności -->
+            <div id="chartOptions" class="chart-options" style="display: none;">
+                <div class="option-group">
+                    <span class="option-label">Typ wykresu:</span>
+                    <input type="radio" id="chartTypeCandle" name="chartType" value="candle" checked> <label for="chartTypeCandle">Świecowy</label>
+                    <input type="radio" id="chartTypeLine" name="chartType" value="line"> <label for="chartTypeLine">Liniowy</label>
+                </div>
+                 <div class="option-group">
+                    <span class="option-label">Wskaźniki:</span>
+                    <input type="checkbox" id="indicatorSMA"> <label for="indicatorSMA">SMA(20)</label>
+                    <input type="checkbox" id="indicatorChannel"> <label for="indicatorChannel">Kanał Ceny(20)</label>
+                    <input type="checkbox" id="indicatorBB"> <label for="indicatorBB">Bollinger(20, 2)</label>
+                    <input type="checkbox" id="indicatorATR"> <label for="indicatorATR">ATR(14)</label>
+                 </div>
+            </div>
+			<div id="plotlyChartDiv" class="plotly-chart-div"> <!-- Właściwy kontener na wykres -->
+				<div id="loadingIndicator" class="loading-indicator" style="display: none;">
+				<!-- Można tu wstawić SVG spinnera lub użyć CSS -->
+				<div class="spinner"></div>
+				Ładowanie danych...
+				</div>
+			</div> 
+			<div id="errorDisplay" class="error-display"></div>
+        </div>
+
     </div>
+	<!-- Koniec app-container -->
+
+
 
     <script src='https://cdn.plot.ly/plotly-3.0.1.min.js'></script>
 	<script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.14.1/runtime.min.js"></script>
