@@ -41,13 +41,14 @@ const bbIndicator = {
      * @param {object} state Stan wskaźnika { period, stdDev, ... }.
      * @returns {Array<object>} Tablica obiektów śladów Plotly.
      */
-    getTraces(allDates, indicatorResult, state) {
+    getTraces(allDates, indicatorResult, indicatorConfig) {
         const dataLength = allDates.length;
-        const period = state.period;
+        const period = indicatorConfig.period;
+		const stdDev = indicatorConfig.stdDev;
         const valuesForPlotly = padBBDataForPlotly(indicatorResult, dataLength, period);
 
         if (valuesForPlotly) {
-            return getBollingerBandsTraces(allDates, valuesForPlotly, state.period, state.stdDev);
+            return getBollingerBandsTraces(allDates, valuesForPlotly, period, stdDev);
         } else {
             return [];
         }

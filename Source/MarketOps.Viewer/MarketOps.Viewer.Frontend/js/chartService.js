@@ -22,7 +22,7 @@ const chartService = {
         if (!this.chartsState[tabId]) {
             // Inicjalizuj stan dla nowej zakładki
             this.chartsState[tabId] = {
-                chartDivId: null, // Ustawione w drawChart
+                chartDivId: `plotly-chart-${tabId}`, // Od razu ustawmy ID diva
                 chartElement: null,
                 currentChartData: null,
                 currentStockInfo: null,
@@ -46,28 +46,32 @@ const chartService = {
     },
 
     drawChart(tabId, apiData, stockInfo) {
-        console.log(`Drawing chart for tab: ${tabId}`);
         const state = this._getChartState(tabId); // Pobierz lub utwórz stan dla tej zakładki
-        state.chartDivId = `plotly-chart-${tabId}`; // ID diva jest teraz znane
-        state.chartElement = document.getElementById(state.chartDivId);
 
+        state.currentChartData = apiData;
+        state.currentStockInfo = stockInfo;
+        state.currentChartType = 'candlestick';
+        state.indicatorState = this._getInitialIndicatorState(); // Resetuj wskaźniki
+        state.calculatedIndicatorData = {}; // Resetuj obliczone
+
+        state.chartElement = document.getElementById(state.chartDivId);
         if (!state.chartElement) {
              console.error(`Element plotly chart div not found for tab ${tabId} with ID ${state.chartDivId}`);
              return false;
         }
-        this.clearChart(tabId); // Wyczyść poprzedni stan tej zakładki
+        // Wyczyść poprzednią zawartość Plotly, jeśli istniała
+        try {
+             if (state.chartElement.layout) { // Sprawdź, czy był tam wykres Plotly
+                 console.log(`[${tabId}] drawChart: Czyszczenie poprzedniego wykresu (Plotly.purge).`);
+                 Plotly.purge(state.chartElement);
+             }
+         } catch(e) { console.warn(`[${tabId}] drawChart: Błąd podczas purge: ${e.message}`); }
 		
-        state.currentChartData = apiData;
-        state.currentStockInfo = stockInfo;
-        state.currentChartType = 'candlestick';
-
         if (!apiData || apiData.length === 0) {
             console.error("Brak danych do narysowania wykresu.");
-            this.clearChart(chartDivId);
             return false;
         }
 		
-        console.log("Rysowanie wykresu Plotly...");
         try {
 			this.calculateIndicators(tabId);
 			
@@ -82,24 +86,26 @@ const chartService = {
             const priceTrace = getPriceTrace(state.currentChartType, dates, opens, highs, lows, closes, stockInfo);
             const volumeTrace = getVolumeTrace(dates, volumes);
 			const traces = [priceTrace, volumeTrace];
-            const layout = this._getLayoutWithIndicators(tabId); // Layout zależy od stanu wskaźników zakładki
+            const layout = this._getLayoutWithIndicators(tabId, state.indicatorState); // Layout zależy od stanu wskaźników zakładki
             state.currentLayout = layout; // Zapisz layout w stanie
 
             Plotly.newPlot(state.chartElement, traces, layout, { responsive: true });
-            console.log("Wykres narysowany.");
+			console.log(`[${tabId}] drawChart: Wykres narysowany. Stan:`, JSON.stringify(Object.keys(this.chartsState))); // Pokaż klucze w stanie globalnym
             return true;
         } catch (error) {
             console.error("Błąd podczas przygotowywania lub rysowania wykresu Plotly:", error);
-            this.clearChart(chartDivId);
+            this.clearChart(state.chartDivId);
             return false;
         }
     },
 
     updateChartType(tabId, newType) {
         const state = this._getChartState(tabId);
-        if (!state.chartElement || !state.currentChartData || newType === state.currentChartType) return;
+         if (!state.chartElement || !state.currentChartData || newType === state.currentChartType) {
+              console.warn(`updateChartType: Warunki niespełnione lub brak elementu dla ${tabId}`);
+              return;
+         }
 
-        console.log(`Aktualizacja typu wykresu dla ${tabId} do: ${newType}`);
         const apiData = state.currentChartData;
         const dates = apiData.map(item => item.timestamp.substring(0, 10));
         const opens = apiData.map(item => item.open);
@@ -131,7 +137,6 @@ const chartService = {
         try {
             Plotly.restyle(state.chartElement, updateData, [0]);
             state.currentChartType = newType; 
-            console.log(`Typ wykresu dla ${tabId} zaktualizowany.`);
         } catch (error) {
             console.error("Błąd podczas aktualizacji typu wykresu (Plotly.restyle):", error);
             // W razie błędu można spróbować przerysować cały wykres
@@ -144,7 +149,6 @@ const chartService = {
         if (!state.currentChartData || state.currentChartData.length === 0) {
             state.calculatedIndicatorData = {}; return;
         }
-        console.log(`Obliczanie wskaźników dla zakładki: ${tabId}`);
         const data = state.currentChartData;
         // Przygotuj dane wejściowe dla biblioteki technicalindicators
         const input = {
@@ -160,16 +164,14 @@ const chartService = {
 
         for (const key in indicatorModules) {
             const module = indicatorModules[key];
-            const state = state.indicatorState[key];
+            const indicatorConfig = state.indicatorState[key];
             if (module && typeof module.calculate === 'function') {
                 // Przekaż odpowiednie parametry do funkcji calculate
                 let result;
                 if (key === 'BB') {
-                    result = module.calculate(input, state.period, state.stdDev);
-                } else if (key === 'ATR' || key === 'Channel' || key === 'SMA'){ // Dostosuj, jeśli inne wskaźniki potrzebują specyficznych parametrów
-                     result = module.calculate(input, state.period);
+                    result = module.calculate(input, indicatorConfig.period, indicatorConfig.stdDev);
                 } else {
-                     result = module.calculate(input, state.period); // Domyślnie przekazuj okres
+                     result = module.calculate(input, indicatorConfig.period); // Domyślnie przekazuj okres
                 }
 				
                 state.calculatedIndicatorData[key] = result; // Zapisz wynik (może być null)
@@ -178,11 +180,19 @@ const chartService = {
                 }
             }
         }
-		console.log(`Wskaźniki dla zakładki ${tabId} obliczone.`);
     },
 
     toggleIndicator(tabId, indicatorKey, isEnabled) {
         const state = this._getChartState(tabId);
+		
+         if (!state.chartElement) { console.warn(`toggleIndicator: Brak elementu wykresu dla ${tabId}`); return; }
+         if (!state.currentChartData || state.currentChartData.length === 0) { console.warn(`toggleIndicator: Brak danych wykresu dla ${tabId}`); return; }
+
+         // Sprawdź, czy dane dla wykresu w ogóle istnieją
+         if (!state.currentChartData || state.currentChartData.length === 0) {
+             console.warn(`toggleIndicator: Brak danych wykresu dla ${tabId}`);
+             return; // Nie rób nic, jeśli nie ma danych bazowych
+         }
         const module = indicatorModules[indicatorKey];
         if (!state || !module) {
             console.error(`Nieznany klucz wskaźnika lub brak modułu: ${indicatorKey}`);
@@ -191,44 +201,40 @@ const chartService = {
         const indicatorConfig = state.indicatorState[indicatorKey];
         if (!indicatorConfig || indicatorConfig.enabled === isEnabled) return;
 		 
-        // Upewnij się, że dane są obliczone dla tej zakładki
-        if (!state.calculatedIndicatorData || state.calculatedIndicatorData[indicatorKey] === undefined) {
-            console.warn(`Dane dla ${indicatorKey} w ${tabId} nieobliczone. Obliczam...`);
-            this.calculateIndicators(tabId);
-        }
+         // Obliczenia powinny być już zrobione w drawChart, ale dodajmy sprawdzenie
+         if (state.calculatedIndicatorData[indicatorKey] === undefined) {
+             console.warn(`Dane dla ${indicatorKey} w ${tabId} nieobliczone. Próbuję obliczyć ponownie.`);
+             this.calculateIndicators(tabId); // Oblicz ponownie dla tej zakładki
+         }
         const indicatorResult = state.calculatedIndicatorData[indicatorKey];
-
         indicatorConfig.enabled = isEnabled; // Zmień stan dla TEJ zakładki
-        console.log(`Przełączanie wskaźnika ${indicatorKey} na ${isEnabled} dla ${tabId}`);
 
         if (isEnabled) {
             // --- Dodawanie wskaźnika ---
-             if (indicatorResult === null) { // Sprawdź, czy obliczenie się powiodło
-                 console.warn(`Nie można dodać wskaźnika ${indicatorKey}, brak poprawnych danych.`);
-                 indicatorConfig.enabled = false; // Cofnij zmianę stanu
+             if (indicatorResult === null || indicatorResult === undefined) { // Dokładniejsze sprawdzenie
+                 console.warn(`Nie można dodać wskaźnika ${indicatorKey} w ${tabId}, brak poprawnych danych.`);
+                 indicatorConfig.enabled = false; // Cofnij
                  return;
              }
 
             let tracesToAdd = [];
-            const allDates = this.currentChartData.map(item => item.timestamp.substring(0, 10));
+			const allDates = state.currentChartData.map(item => item.timestamp.substring(0, 10));
 
             try {
                 // Wywołaj getTraces z odpowiedniego modułu
-                tracesToAdd = module.getTraces(allDates, indicatorResult, state);
+                tracesToAdd = module.getTraces(allDates, indicatorResult, indicatorConfig);
 
                  if (tracesToAdd && tracesToAdd.length > 0) {
                     Plotly.addTraces(state.chartElement, tracesToAdd).then(() => {
-                        // ... (aktualizacja traceIndexes - logika bez zmian) ...
                         const currentTraceCount = state.chartElement.data ? state.chartElement.data.length : 0;
                         indicatorConfig.traceIndexes = [];
                         for (let i = 0; i < tracesToAdd.length; i++) {
                             indicatorConfig.traceIndexes.push(currentTraceCount - tracesToAdd.length + i);
                         }
-                        console.log(`Dodano ślady dla ${indicatorKey} w ${tabId}, indeksy:`, indicatorConfig.traceIndexes);
                     });
                      // Aktualizuj layout TYLKO jeśli to ATR (lub inny wskaźnik wymagający zmiany layoutu)
                      if (indicatorKey === 'ATR') {
-                        const layoutUpdate = this._getLayoutWithIndicators(tabId);
+                        const layoutUpdate = this._getLayoutWithIndicators(tabId, state.indicatorState);
                         Plotly.relayout(state.chartElement, layoutUpdate);
                      }
                  } else {
@@ -245,10 +251,9 @@ const chartService = {
             if (indicatorConfig.traceIndexes && indicatorConfig.traceIndexes.length > 0) {
                 const sortedIndexes = [...indicatorConfig.traceIndexes].sort((a, b) => b - a);
                 Plotly.deleteTraces(state.chartElement, sortedIndexes).then(() => {
-                    console.log(`Usunięto ślady dla ${indicatorKey} w ${tabId}, indeksy:`, sortedIndexes);
                     indicatorConfig.traceIndexes = [];
                     if (indicatorKey === 'ATR') {
-                         const layoutUpdate = this._getLayoutWithIndicators(tabId);
+                         const layoutUpdate = this._getLayoutWithIndicators(tabId, state.indicatorState);
                          Plotly.relayout(state.chartElement, layoutUpdate);
                     }
                 });
@@ -256,12 +261,12 @@ const chartService = {
         }
      },
 
-     _getLayoutWithIndicators(tabId) {
+     _getLayoutWithIndicators(tabId, currentIndicatorState) {
         const state = this._getChartState(tabId);
         const baseLayout = getOhlcvLayout(state.currentStockInfo); // Użyj info ze stanu zakładki
 
          // Sprawdź, czy ATR jest włączony
-         if (state.indicatorState.ATR.enabled) {
+         if (currentIndicatorState.ATR.enabled) {
               // Dostosuj domeny osi Y, aby zrobić miejsce na ATR
               baseLayout.yaxis.domain = [0.35, 1]; // Cena: 35% - 100%
               baseLayout.yaxis2.domain = [0.15, 0.30]; // Wolumen: 15% - 30%
@@ -269,7 +274,7 @@ const chartService = {
               baseLayout.yaxis3 = {
                     ...baseLayout.yaxis.titlefont ? { titlefont: baseLayout.yaxis.titlefont } : {}, // Kopiuj style fontów jeśli istnieją
                     ...baseLayout.yaxis.tickfont ? { tickfont: baseLayout.yaxis.tickfont } : {},
-                    title: `ATR(${this.indicatorState.ATR.period})`,
+                    title: `ATR(${currentIndicatorState.ATR.period})`,
                     domain: [0, 0.10], // Dolne 10%
                     autorange: true,
                     showgrid: true,
@@ -287,19 +292,14 @@ const chartService = {
      },
 
     clearChart(tabId) {
-        console.log(`Clearing chart state for tab: ${tabId}`);
-        const state = this.chartsState[tabId]; // Nie używaj _getChartState, bo chcemy usunąć
-        if (state) { // Sprawdź czy stan istnieje
-             // ID diva jest w stanie, jeśli zostało ustawione
-             const plotlyDivId = state.chartDivId || `plotly-chart-${tabId}`; // Fallback na konwencję
-             const chartElement = document.getElementById(plotlyDivId);
-             if (chartElement) {
-                // this._removeMouseListeners(chartElement); // Jeśli dodano listenery
-                 try { Plotly.purge(chartElement); } catch(e) {}
-             }
+        const state = this.chartsState[tabId];
+        if (state && state.chartElement) {
+            // this._removeMouseListeners(state.chartElement); // Jeśli są
+            try { Plotly.purge(state.chartElement); } catch(e) {}
+        } else {
+             // console.log(`[${tabId}] clearChart: Brak stanu lub elementu do wyczyszczenia.`);
         }
-        // Usuń stan tej zakładki
-        delete this.chartsState[tabId];
+        delete this.chartsState[tabId]; // Usuń stan
     },
 
     // Modyfikacja _removeMouseListeners, aby przyjmowała element

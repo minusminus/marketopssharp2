@@ -41,14 +41,15 @@ const atrIndicator = {
      * @param {object} state Stan wskaźnika { period, yaxis, ... }.
      * @returns {Array<object>} Tablica obiektów śladów Plotly.
      */
-    getTraces(allDates, indicatorResult, state) {
+    getTraces(allDates, indicatorResult, indicatorConfig) {
         const dataLength = allDates.length;
-        const period = state.period;
+        const period = indicatorConfig.period;
+		const yaxisId = indicatorConfig.yaxis;
         // Dla ATR padding zaczyna się od indeksu 'period'
         const valuesForPlotly = padDataForPlotly(indicatorResult, dataLength, period + 1); // Użyj period+1 dla paddingu
 
         if (valuesForPlotly) {
-            return [getAtrTrace(allDates, valuesForPlotly, state.period, state.yaxis)];
+            return [getAtrTrace(allDates, valuesForPlotly, period, yaxisId)];
         } else {
             return [];
         }

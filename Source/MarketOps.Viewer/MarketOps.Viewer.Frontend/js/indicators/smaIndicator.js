@@ -44,9 +44,9 @@ const smaIndicator = {
      * @param {object} state Stan wskaźnika { period, ... }.
      * @returns {Array<object>} Tablica obiektów śladów Plotly.
      */
-    getTraces(allDates, indicatorResult, state) {
+    getTraces(allDates, indicatorResult, indicatorConfig) {
         const dataLength = allDates.length;
-        const period = state.period;
+        const period = indicatorConfig.period;
         const valuesForPlotly = padDataForPlotly(indicatorResult, dataLength, period);
 
         if (valuesForPlotly) {

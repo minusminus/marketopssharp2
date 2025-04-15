@@ -1,82 +1,79 @@
 // js/main.js
-import { uiHandler } from './uiHandler.js';
+import { globalControls } from './globalControls.js'; // Nowy moduł
+import { tabManager } from './tabManager.js';       // Nowy moduł
 import { apiService } from './apiService.js';
 import { chartService } from './chartService.js';
 
-// Czekaj na załadowanie całej struktury DOM
 document.addEventListener('DOMContentLoaded', () => {
 
-	let tabCounter = 0; // Przeniesiono licznik tutaj
+    let tabCounter = 0;
 
-    // --- Główna Logika Aplikacji (Orkiestracja) ---
-    async function handleAddOrShowChart(params) {
-        // uiHandler.showLoading(true, uiHandler.activeTabId);
-		
-		const newTabId = `chart-tab-${++tabCounter}`; // Inkrementuj i przypisz
-		let currentTabActivated = false; // Flaga śledząca, czy zakładka została już dodana do DOM
-		let newTabButton = null; // Przechowamy referencję do przycisku
+    // Funkcja wywoływana przez globalControls po kliknięciu przycisku
+    async function handleAddOrShowChart(params, stockInfo) { // Otrzymuje oba zestawy danych
+        const newTabId = `chart-tab-${++tabCounter}`;
+        let tabElements = null; // Przechowa { button, plotlyDivId }
+
+        tabManager.showLoading(true, tabManager.activeTabId); // Pokaż loading w aktywnej (jeśli jest)
 
         try {
-            // Pobierz dane z API
+            // Pobierz dane w tle
             const apiDataPromise = apiService.fetchStockData(
                 params.stockId, params.timeframe, params.startDate, params.endDate
             );
-            const selectedStockInfo = uiHandler.getSelectedStockInfo();
-            if (!selectedStockInfo) throw new Error("Nie udało się pobrać informacji o instrumencie.");
 
-            // Dodaj zakładkę - to ją aktywuje
-            newTabButton = uiHandler.addTab(newTabId, selectedStockInfo.symbol);
-			currentTabActivated = true; // Zakładka istnieje w DOM
-			console.log('timeframe: ' + params.timeframe);
-			uiHandler.setTabButtonContent(newTabButton, newTabId, selectedStockInfo, params.timeframe);
-            // Pokaż loading w NOWEJ zakładce
-            uiHandler.showLoading(true, newTabId);
-            // Ukryj opcje w nowej zakładce
-            uiHandler.toggleChartOptions(false, newTabId);
-            // Wyczyść błędy w nowej zakładce
-            uiHandler.clearError(newTabId);
+            // Dodaj strukturę zakładki i pobierz referencje
+            tabElements = tabManager.addTab(newTabId); // Zwraca { button, plotlyDivId }
+            tabManager.setTabButtonContent(tabElements.button, newTabId, stockInfo, params.timeframe);
 
-            // Czekaj na zakończenie pobierania danych
+            // Pokaż loading w nowej zakładce
+            tabManager.showLoading(true, newTabId);
+            tabManager.toggleChartOptions(false, newTabId);
+            tabManager.clearError(newTabId);
+
+            // Czekaj na dane
             const apiData = await apiDataPromise;
 
-             // Narysuj wykres w NOWEJ (aktywnej) zakładce
-             const chartDrawn = chartService.drawChart(newTabId, apiData, selectedStockInfo);
-			uiHandler.showLoading(false, newTabId);
+            // Narysuj wykres
+            // Przekazujemy ID ZAKŁADKI, a nie ID diva plotly
+            const chartDrawn = chartService.drawChart(newTabId, apiData, stockInfo);
 
-             if (chartDrawn) {
-                  uiHandler.toggleChartOptions(true, newTabId); // Pokaż opcje w aktywnej zakładce
-             } else {
-                  uiHandler.showError("Błąd podczas rysowania wykresu.", newTabId);
-             }
+            // Ukryj loading
+            tabManager.showLoading(false, newTabId);
+
+            if (chartDrawn) {
+                tabManager.toggleChartOptions(true, newTabId);
+            } else {
+                tabManager.showError("Błąd podczas rysowania wykresu.", newTabId);
+            }
 
         } catch (error) {
-             console.error(`Błąd w handleAddOrShowChart dla ${newTabId}:`, error);
-             // Jeśli zakładka została już dodana, pokaż błąd w niej
-             if (currentTabActivated) {
-                 uiHandler.showError(`Błąd: ${error.message}`, newTabId);
-                 // Ukryj loading w tej zakładce, jeśli błąd wystąpił przed ukryciem
-                 uiHandler.showLoading(false, newTabId);
-                 uiHandler.toggleChartOptions(false, newTabId); // Ukryj też opcje
+            console.error(`Błąd w handleAddOrShowChart dla ${newTabId}:`, error);
+             const targetTabId = tabElements ? newTabId : null; // Sprawdź, czy zakładka została utworzona
+             if (targetTabId) {
+                 tabManager.showError(`Błąd: ${error.message}`, targetTabId);
+                 tabManager.showLoading(false, targetTabId); // Ukryj loading w razie błędu
+                 tabManager.toggleChartOptions(false, targetTabId);
              } else {
-                 uiHandler.showGlobalError(`Błąd: ${error.message}`);
+                 globalControls.showGlobalError(`Błąd: ${error.message}`);
              }
+        } finally {
+             // Ukryj loading w poprzedniej aktywnej, jeśli się zmieniła (może nie być potrzebne)
+             // if (tabManager.activeTabId !== newTabId) { ... }
         }
     }
 
-    // Funkcja wywoływana przez UI po zamknięciu zakładki
+    // Funkcja wywoływana przez tabManager po zamknięciu zakładki
     function handleCloseTab(tabId) {
-        chartService.clearChart(tabId); // Powiadom serwis wykresów, aby wyczyścił stan
+        chartService.clearChart(tabId); // Powiadom serwis wykresów
     }
 
-     // Funkcja wywoływana przez UI po zmianie aktywnej zakładki (na razie pusta, może być potrzebna później)
+     // Funkcja wywoływana przez tabManager po zmianie aktywnej zakładki
      function handleSwitchTab(tabId) {
-         console.log(`Aktywowano zakładkę: ${tabId}`);
-         // Można tu np. odświeżyć dane lub dostosować UI globalne
+         // Na razie nic nie robimy, ale można np. zaktualizować tytuł strony
      }
 
-
-    // --- Inicjalizacja UI ---
-    // Przekaż funkcje obsługi zdarzeń do uiHandler
-    uiHandler.init(handleAddOrShowChart, handleCloseTab, handleSwitchTab);
+    // --- Inicjalizacja Modułów ---
+    globalControls.init(handleAddOrShowChart);
+    tabManager.init(handleCloseTab, handleSwitchTab);
 
 }); // Koniec DOMContentLoaded
