@@ -74,7 +74,10 @@ const tabManager = {
                  </div>
             </div>
             <div id="${plotlyDivId}" class="plotly-chart-div">
-                <div class="loading-indicator" style="display: none;">...</div>
+                <div class="loading-indicator" style="display: none;">
+					<div class="spinner"></div>
+					Ładowanie danych...
+				</div>
             </div>
             <div class="error-display"></div>
         `; // Skrócone etykiety dla oszczędności miejsca
@@ -158,8 +161,8 @@ const tabManager = {
         newPane?.classList.add('active');
 
         this.activeTabId = tabId;
+		this.showLoading(false, tabId); // Jawnie ukryj wskaźnik dla tej zakładki
 
-        // === ZMIANA: Przenieś resize tutaj ===
         setTimeout(() => {
             const plotlyDivId = `plotly-chart-${tabId}`;
             const chartElement = document.getElementById(plotlyDivId);
@@ -167,7 +170,6 @@ const tabManager = {
                  try { Plotly.Plots.resize(chartElement); } catch (e) { console.error(e); }
             }
         }, 0);
-        // ====================================
 
         if (this.switchTabCallback) this.switchTabCallback(tabId);
     },
