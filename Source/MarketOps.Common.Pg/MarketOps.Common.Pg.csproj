@@ -7,7 +7,7 @@
 
     <Product>MarketOps</Product>
     <Title>MarketOps</Title>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <Authors>Michał Śmiechowski</Authors>
     <Copyright>Copyright © Michał Śmiechowski $([System.DateTime]::Now.Year)</Copyright>
   </PropertyGroup>
@@ -19,10 +19,10 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
-    <PackageReference Include="Npgsql" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>

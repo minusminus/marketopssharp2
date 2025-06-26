@@ -39,4 +39,13 @@ public static class ServicesConfiguration
         services.AddTransient<IDataPumpStocksSelector, AllStocksSelector>();
         return services;
     }
+
+    public static IServiceCollection RegisterBossaFromFileUnzippedProvider(this IServiceCollection services)
+    {
+        services.AddTransient<IDataDownloader, DataDownloaderUnzipped>();
+
+        services.AddTransient<IDataPumpPumpingDataProvider, BossaDataProvider>();
+        services.AddTransient<IDataPumpStocksSelector, AllStocksSelector>();
+        return services;
+    }
 }

@@ -7,7 +7,7 @@
 
     <Product>MarketOps</Product>
     <Title>MarketOps</Title>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <Authors>Michał Śmiechowski</Authors>
     <Copyright>Copyright © Michał Śmiechowski $([System.DateTime]::Now.Year)</Copyright>
   </PropertyGroup>
