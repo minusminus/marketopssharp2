@@ -6,6 +6,7 @@
 internal enum PumpingDataProvider
 {
     Bossa,
-    BossaFromfile,
+    BossaFromFile,
+    BossaFromFileUnzipped,
     PkoFunds
 }
